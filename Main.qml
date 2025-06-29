@@ -1,6 +1,7 @@
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+import QtQuick 6.2
+import QtQuick.Controls 6.2
 import QtQuick.Layouts 2.15
+import Calculator 1.0
 
 Window
 {
@@ -12,6 +13,16 @@ Window
     minimumHeight: 470
     minimumWidth: 400
     title: qsTr("Calculator")
+
+    property string str: ""
+
+    Backend
+    {
+        id: backend
+        onStrUpdated: (newStr) => {
+                    str = newStr
+                }
+    }
 
     GridLayout {
         id: gridLayout
@@ -34,18 +45,21 @@ Window
         }
 
         MyGridButton {
-            id: button_remove_all
+            id: button_Clear_Entry
             text: "CE"
+            onClicked: backend.remove(Backend.REMOVE_STR)
         }
 
         MyGridButton {
-            id: button_removestr
+            id: button_Clear
             text: "С"
+            onClicked: backend.remove(Backend.REMOVE_ALL)
         }
 
         MyGridButton {
             id: button_remove_elem
             text: qsTr("\u232B")
+            onClicked: backend.remove(Backend.REMOVE_ELEM)
         }
 
         MyGridButton {
@@ -71,36 +85,43 @@ Window
         MyGridButton {
             id: button_num7
             text: "7"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_num8
             text: "8"
+            onClicked: {backend.addDigit(text)
+            }
         }
 
         MyGridButton {
             id: button_num9
             text: "9"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_mult
-            text: "\u00D7"
+            text: qsTr("\u00D7")
         }
 
         MyGridButton {
             id: button_num4
             text: "4"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_num5
             text: "5"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_num6
             text: "6"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
@@ -111,21 +132,25 @@ Window
         MyGridButton {
             id: button_num1
             text: "1"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_num2
             text: "2"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_num3
             text: "3"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
             id: button_plus
-            text: "%"
+            text: "+"
+            onClicked: str += text
         }
 
         MyGridButton {
@@ -136,6 +161,7 @@ Window
         MyGridButton {
             id: button_num0
             text: "0"
+            onClicked: backend.addDigit(text)
         }
 
         MyGridButton {
@@ -166,19 +192,12 @@ Window
 
         Button {
             id: button_show_hist
-            Layout.preferredWidth: 20
-            Layout.preferredHeight: 20
             text: qsTr("\u21BA")
             display: AbstractButton.TextOnly
-            Layout.maximumHeight: 60
-            Layout.maximumWidth: 60
-            Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
-            Layout.rightMargin: 0
-            Layout.topMargin: 0
-            Layout.minimumHeight: 40
-            Layout.minimumWidth: 40
+            Layout.preferredWidth: height
+            Layout.preferredHeight: 0.2 * columnLayout.height // 20 %
+
             background: Rectangle {
                 anchors.fill: parent
                 radius: 7
@@ -191,8 +210,8 @@ Window
             }
 
             contentItem: Text {
-                anchors.centerIn: parent
                 text: button_show_hist.text
+                anchors.fill: parent
                 color: "black"
                 font.pixelSize: 16
                 horizontalAlignment: Text.AlignHCenter
@@ -202,59 +221,45 @@ Window
 
         Rectangle {
             id: list_history
-            width: 200
-            height: 200
             color: "#ffffff"
-            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
-            Layout.preferredWidth: 384
-            Layout.preferredHeight: 40
-            Layout.minimumHeight: 20
-            Layout.minimumWidth: 384
+            Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillHeight: true
             Layout.fillWidth: true
+            Layout.preferredHeight: 0.15 * columnLayout.height // 15 %
 
             Text {
                 id: text_hist
                 text: qsTr("48 * 91")
-                anchors.fill: parent
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                //fontSizeMode: Text.Fit
                 font.pixelSize: list_history.height / 1.3
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignBottom
             }
         }
 
-        TextField {
+        TextEdit {
             id: textField_enter_oper
-            color: "black"
-            text: "123"
+            text: qsTr(str)
             font.pixelSize: textField_enter_oper.height / 1.3
             horizontalAlignment: Text.AlignRight
-            verticalAlignment: Text.AlignVCenter
-            Layout.minimumWidth: 384
-            Layout.minimumHeight: 70
-            placeholderTextColor: "#88ffffff"
+            verticalAlignment: Text.AlignBottom
+            Layout.minimumHeight: 60
+            font.family: "Arial"
+            Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             Layout.fillHeight: true
             Layout.fillWidth: true
-            hoverEnabled: true
-            font.italic: false
-            font.bold: true
-            font.weight: Font.Normal
-            font.family: "Arial"
-            placeholderText: qsTr("")
-
-            background: Rectangle {
-                color: "white"
-                radius: 5
-                border.color: "white"
-                border.width: 1
-            }
+            Layout.preferredHeight: 0.65 * columnLayout.height // 65 %
         }
     }
-
 }
+
 
 /*##^##
 Designer {
-    D{i:0}D{i:1}D{i:26}D{i:33;locked:true}
+    D{i:0}D{i:1;invisible:true}
 }
 ##^##*/
