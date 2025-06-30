@@ -80,6 +80,7 @@ Window
         MyGridButton {
             id: button_division
             text: qsTr("\u00F7")
+            onClicked: backend.addOper(text)
         }
 
         MyGridButton {
@@ -104,6 +105,7 @@ Window
         MyGridButton {
             id: button_mult
             text: qsTr("\u00D7")
+            onClicked: backend.addOper(text)
         }
 
         MyGridButton {
@@ -127,6 +129,7 @@ Window
         MyGridButton {
             id: button_minus
             text: qsTr("\u2212")
+            onClicked: backend.addOper(text)
         }
 
         MyGridButton {
@@ -150,7 +153,7 @@ Window
         MyGridButton {
             id: button_plus
             text: "+"
-            onClicked: str += text
+            onClicked: backend.addOper(text)
         }
 
         MyGridButton {

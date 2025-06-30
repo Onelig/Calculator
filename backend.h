@@ -21,6 +21,7 @@ public:
     explicit Backend(QObject *parent = nullptr);
     Q_INVOKABLE void remove(RemoveMode mode);
     Q_INVOKABLE void addDigit(const QString& digit);
+    Q_INVOKABLE void addOper(const QString& oper);
 
 signals:
     void strUpdated(const QString &newStr);

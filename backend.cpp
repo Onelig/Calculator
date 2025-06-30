@@ -37,3 +37,16 @@ void Backend::addDigit(const QString &digit)
     str += digit;
     emit strUpdated(str);
 }
+
+void Backend::addOper(const QString &oper)
+{
+    if (str.back().isSymbol() && !(oper == QStringLiteral("\u2212") && str.back() != QChar(0x2212) && str.back() != QChar('+')))
+    {
+        if (str.size() >= 2 && !str[str.size() - 2].isSymbol())
+            str.back() = oper.front();
+    }
+    else
+        str += oper;
+
+    emit strUpdated(str);
+}
