@@ -22,12 +22,14 @@ public:
     Q_INVOKABLE void remove(RemoveMode mode);
     Q_INVOKABLE void addDigit(const QString& digit);
     Q_INVOKABLE void addOper(const QString& oper);
+    Q_INVOKABLE void changeSign();
 
 signals:
     void strUpdated(const QString &newStr);
 
 private:
     QString str;
+    void ChangeSignASign(int index);
 };
 
 #endif // BACKEND_H

@@ -157,8 +157,9 @@ Window
         }
 
         MyGridButton {
-            id: button_plmin
+            id: button_change_sign
             text: qsTr("\u00B1")
+            onClicked: backend.changeSign()
         }
 
         MyGridButton {
