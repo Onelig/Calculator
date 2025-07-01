@@ -34,39 +34,89 @@ void Backend::remove(RemoveMode mode)
     emit strUpdated(str);
 }
 
-void Backend::addDigit(const QString &digit)
+void Backend::addElem(const QChar &elem_)
+{
+    if (elem_.isDigit())
+        addDigit(elem_);
+
+    else if (elem_.isSymbol())
+        addOper(elem_);
+}
+
+void Backend::addDigit(const QChar &digit)
 {
     str += digit;
     emit strUpdated(str);
 }
 
-void Backend::addOper(const QString &oper)
+void Backend::addOper(const QChar &oper)
 {
-    if (str.back().isSymbol() && !(oper == QStringLiteral("\u2212") && str.back() != QChar(0x2212) && str.back() != QChar('+'))) // '-'
+    if (!str.isEmpty())
     {
-        if (str.size() >= 2 && !str[str.size() - 2].isSymbol())
-            str.back() = oper.front();
+        if(str.back() == QChar('.'))
+            str.chop(1);
+
+        else if (str.back().isSymbol() && !(oper == QStringLiteral("\u2212") && str.back() != QChar(0x2212) && str.back() != QChar('+'))) // '-'
+        {
+            if (str.size() >= 2 && !str[str.size() - 2].isSymbol())
+                str.back() = oper;
+        }
+        else
+            str += oper;
     }
-    else
-        str += oper;
+    else if (oper == QChar(0x2212))
+        str = QChar(0x2212);
+
 
     emit strUpdated(str);
 }
 
 void Backend::changeSign()
 {
-    if (str.back().isSymbol())
-        ChangeSignASign(str.size() - 1);
-
-    else
+    if (!str.isEmpty())
     {
-        auto iter = std::find_if(str.rbegin(), str.rend(), [](const QChar& a){ return a.isSymbol(); });
-        if (iter == str.rend())
-            str.prepend(QChar(0x2212));
+        if (str.back().isSymbol())
+            ChangeSignASign(str.size() - 1);
 
         else
-            ChangeSignASign(iter.base() - 1 - str.begin());
+        {
+            auto iter = std::find_if(str.rbegin(), str.rend(), [](const QChar& a){ return a.isSymbol(); });
+            if (iter == str.rend())
+                str.prepend(QChar(0x2212));
+
+            else
+                ChangeSignASign(iter.base() - 1 - str.begin());
+        }
     }
+
+    emit strUpdated(str);
+}
+
+void Backend::addPoint()
+{
+    if (!str.isEmpty())
+    {
+        bool pinStr = str.rbegin()->isSymbol();
+
+        if (!pinStr)
+        {
+            for (auto iter = str.rbegin(), rend = str.rend(); iter != rend; ++iter)
+            {
+                if (iter->isSymbol())
+                    break;
+
+                else if (*iter == QChar('.'))
+                {
+                    pinStr = true;
+                   break;
+                }
+            }
+
+            if (!pinStr)
+                str.push_back('.');
+        }
+    }
+
     emit strUpdated(str);
 }
 

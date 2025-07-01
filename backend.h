@@ -20,9 +20,11 @@ public:
 public:
     explicit Backend(QObject *parent = nullptr);
     Q_INVOKABLE void remove(RemoveMode mode);
-    Q_INVOKABLE void addDigit(const QString& digit);
-    Q_INVOKABLE void addOper(const QString& oper);
+    Q_INVOKABLE void addElem(const QChar& elem_);
+    Q_INVOKABLE void addDigit(const QChar& digit);
+    Q_INVOKABLE void addOper(const QChar& oper);
     Q_INVOKABLE void changeSign();
+    Q_INVOKABLE void addPoint();
 
 signals:
     void strUpdated(const QString &newStr);

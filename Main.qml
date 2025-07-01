@@ -20,8 +20,9 @@ Window
     {
         id: backend
         onStrUpdated: (newStr) => {
-                    str = newStr
-                }
+                          str = newStr
+                          //console.log("Update")
+                      }
     }
 
     GridLayout {
@@ -171,6 +172,7 @@ Window
         MyGridButton {
             id: button_point
             text: "."
+            onClicked: backend.addPoint()
         }
 
         MyGridButton {
@@ -238,17 +240,16 @@ Window
                 anchors.right: parent.right
                 anchors.top: parent.top
                 anchors.topMargin: 10
-                //fontSizeMode: Text.Fit
                 font.pixelSize: list_history.height / 1.3
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignBottom
             }
         }
 
-        TextEdit {
-            id: textField_enter_oper
-            text: qsTr(str)
-            font.pixelSize: textField_enter_oper.height / 1.3
+        TextInput {
+            id: textInput_enter_oper
+            text: str
+            font.pixelSize: textInput_enter_oper.height / 1.3
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignBottom
             Layout.minimumHeight: 60
@@ -257,11 +258,29 @@ Window
             Layout.fillHeight: true
             Layout.fillWidth: true
             Layout.preferredHeight: 0.65 * columnLayout.height // 65 %
+            focus: true
+            wrapMode: TextEdit.NoWrap
+            readOnly: true
+
+            Keys.onPressed: (event) => {
+                                var regex = /^[0-9+]$/
+                                if (regex.test(event.text))
+                                    backend.addElem(event.text)
+                                else if (event.key === Qt.Key_Minus) // '-'
+                                    button_minus.clicked()
+                                else if (event.key === Qt.Key_Asterisk) // '*'
+                                    button_mult.clicked()
+                                else if (event.key === Qt.Key_Slash) // '/'
+                                    button_division.clicked()
+                                else if (event.key === Qt.Key_Backspace && event.modifiers & Qt.ControlModifier) // remove str
+                                    button_Clear_Entry.clicked()
+                                else if (event.key === Qt.Key_Backspace) // remove one element
+                                    button_remove_elem.clicked()
+            }
         }
+
     }
 }
-
-
 /*##^##
 Designer {
     D{i:0}D{i:1;invisible:true}
