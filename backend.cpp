@@ -1,8 +1,12 @@
 #include "backend.h"
+#include <QKeyEvent>
+#include <QRegularExpression>
 
 Backend::Backend(QObject *parent)
     : QObject{parent}
-{}
+{
+    qApp->installEventFilter(this);
+}
 
 void Backend::remove(RemoveMode mode)
 {
@@ -56,7 +60,7 @@ void Backend::addOper(const QChar &oper)
         if(str.back() == QChar('.'))
             str.chop(1);
 
-        else if (str.back().isSymbol() && !(oper == QStringLiteral("\u2212") && str.back() != QChar(0x2212) && str.back() != QChar('+'))) // '-'
+        if (str.back().isSymbol() && !(oper == QChar(0x2212) && str.back() != QChar(0x2212) && str.back() != QChar('+'))) // '-'
         {
             if (str.size() >= 2 && !str[str.size() - 2].isSymbol())
                 str.back() = oper;
@@ -118,6 +122,35 @@ void Backend::addPoint()
     }
 
     emit strUpdated(str);
+}
+
+bool Backend::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::KeyPress)
+    {
+        QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        int key = keyEvent->key();
+        if (keyEvent->text().contains(QRegularExpression("[0-9]")))
+            addDigit(keyEvent->text().back());
+        else if (key == Qt::Key_Minus) // '-'
+            addOper(QChar(0x2212));
+        else if (key == Qt::Key_Asterisk) // '*'
+            addOper(QChar(0x00D7));
+        else if (key  == Qt::Key_Slash) // '/'
+            addOper(QChar(0x00F7));
+        else if (key == Qt::Key_Plus)
+            addOper('+');
+        else if (key == Qt::Key_Period)
+            addPoint();
+        else if (key == Qt::Key_Backspace && keyEvent->modifiers() & Qt::ControlModifier) // remove str
+            remove(REMOVE_STR);
+        else if (key == Qt::Key_Backspace) // remove one element
+            remove(REMOVE_ELEM);
+
+        return true;
+    }
+
+    return false;
 }
 
 void Backend::ChangeSignASign(int index)

@@ -13,15 +13,29 @@ Window
     minimumHeight: 470
     minimumWidth: 400
     title: qsTr("Calculator")
-
     property string str: ""
+    /*onKeyPressed: (event) => {
+                        var regex = /^[0-9+]$/
+                        if (regex.test(event.text))
+                            backend.addElem(event.text)
+                        else if (event.key === Qt.Key_Minus) // '-'
+                            button_minus.clicked()
+                        else if (event.key === Qt.Key_Asterisk) // '*'
+                            button_mult.clicked()
+                        else if (event.key === Qt.Key_Slash) // '/'
+                            button_division.clicked()
+                        else if (event.key === Qt.Key_Backspace && event.modifiers & Qt.ControlModifier) // remove str
+                            button_Clear_Entry.clicked()
+                        else if (event.key === Qt.Key_Backspace) // remove one element
+                            button_remove_elem.clicked()
+    }*/
+
 
     Backend
     {
         id: backend
         onStrUpdated: (newStr) => {
                           str = newStr
-                          //console.log("Update")
                       }
     }
 
@@ -262,27 +276,8 @@ Window
             wrapMode: TextEdit.NoWrap
             readOnly: true
 
-            Keys.onPressed: (event) => {
-                                var regex = /^[0-9+]$/
-                                if (regex.test(event.text))
-                                    backend.addElem(event.text)
-                                else if (event.key === Qt.Key_Minus) // '-'
-                                    button_minus.clicked()
-                                else if (event.key === Qt.Key_Asterisk) // '*'
-                                    button_mult.clicked()
-                                else if (event.key === Qt.Key_Slash) // '/'
-                                    button_division.clicked()
-                                else if (event.key === Qt.Key_Backspace && event.modifiers & Qt.ControlModifier) // remove str
-                                    button_Clear_Entry.clicked()
-                                else if (event.key === Qt.Key_Backspace) // remove one element
-                                    button_remove_elem.clicked()
-            }
+
         }
 
     }
 }
-/*##^##
-Designer {
-    D{i:0}D{i:1;invisible:true}
-}
-##^##*/

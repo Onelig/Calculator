@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <qqml.h>
+#include <QGuiApplication>
 
 class Backend : public QObject
 {
@@ -29,9 +30,13 @@ public:
 signals:
     void strUpdated(const QString &newStr);
 
+protected:
+    bool eventFilter(QObject *object, QEvent *event);
+
 private:
     QString str;
     void ChangeSignASign(int index);
+
 };
 
 #endif // BACKEND_H
