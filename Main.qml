@@ -14,22 +14,6 @@ Window
     minimumWidth: 400
     title: qsTr("Calculator")
     property string str: ""
-    /*onKeyPressed: (event) => {
-                        var regex = /^[0-9+]$/
-                        if (regex.test(event.text))
-                            backend.addElem(event.text)
-                        else if (event.key === Qt.Key_Minus) // '-'
-                            button_minus.clicked()
-                        else if (event.key === Qt.Key_Asterisk) // '*'
-                            button_mult.clicked()
-                        else if (event.key === Qt.Key_Slash) // '/'
-                            button_division.clicked()
-                        else if (event.key === Qt.Key_Backspace && event.modifiers & Qt.ControlModifier) // remove str
-                            button_Clear_Entry.clicked()
-                        else if (event.key === Qt.Key_Backspace) // remove one element
-                            button_remove_elem.clicked()
-    }*/
-
 
     Backend
     {
@@ -57,6 +41,7 @@ Window
         MyGridButton {
             id: button_percent
             text: "%"
+            onClicked: backend.addOper("%")
         }
 
         MyGridButton {
@@ -78,18 +63,21 @@ Window
         }
 
         MyGridButton {
-            id: button_fraction
-            text: qsTr("x\u207B\u00B9")
-        }
-
-        MyGridButton {
-            id: button_power
-            text: qsTr("x\u00B2")
-        }
-
-        MyGridButton {
             id: button_root
             text: qsTr("\u221Ax")
+            onClicked: backend.addRoot()
+        }
+
+        MyGridButton {
+            id: button_lbr
+            text: qsTr("(")
+            onClicked: backend.addBracket(true)
+        }
+
+        MyGridButton {
+            id: button_rbr
+            text: qsTr(")")
+            onClicked: backend.addBracket(false)
         }
 
         MyGridButton {
@@ -275,8 +263,6 @@ Window
             focus: true
             wrapMode: TextEdit.NoWrap
             readOnly: true
-
-
         }
 
     }

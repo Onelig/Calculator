@@ -38,14 +38,14 @@ void Backend::remove(RemoveMode mode)
     emit strUpdated(str);
 }
 
-void Backend::addElem(const QChar &elem_)
-{
-    if (elem_.isDigit())
-        addDigit(elem_);
-
-    else if (elem_.isSymbol())
-        addOper(elem_);
-}
+//void Backend::addElem(const QChar &elem_)
+//{
+//    if (elem_.isDigit())
+//        addDigit(elem_);
+//
+//    else if (elem_.isSymbol())
+//        addOper(elem_);
+//}
 
 void Backend::addDigit(const QChar &digit)
 {
@@ -124,28 +124,55 @@ void Backend::addPoint()
     emit strUpdated(str);
 }
 
+void Backend::addRoot()
+{
+    str.push_back(QChar(0x221A));
+    emit strUpdated(str);
+}
+
+void Backend::addBracket(bool isOpen)
+{
+    str.push_back(QChar(isOpen ? '(' : ')'));
+
+    emit strUpdated(str);
+}
+
+void Backend::addPercent()
+{
+    str.push_back(QChar('%'));
+
+    emit strUpdated(str);
+}
+
 bool Backend::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::KeyPress)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-        int key = keyEvent->key();
-        if (keyEvent->text().contains(QRegularExpression("[0-9]")))
+        const int key = keyEvent->key();
+        const QString text = keyEvent->text();
+
+        if (text.contains(QRegularExpression("[0-9]")))
             addDigit(keyEvent->text().back());
-        else if (key == Qt::Key_Minus) // '-'
-            addOper(QChar(0x2212));
-        else if (key == Qt::Key_Asterisk) // '*'
-            addOper(QChar(0x00D7));
-        else if (key  == Qt::Key_Slash) // '/'
-            addOper(QChar(0x00F7));
-        else if (key == Qt::Key_Plus)
-            addOper('+');
-        else if (key == Qt::Key_Period)
-            addPoint();
-        else if (key == Qt::Key_Backspace && keyEvent->modifiers() & Qt::ControlModifier) // remove str
-            remove(REMOVE_STR);
-        else if (key == Qt::Key_Backspace) // remove one element
-            remove(REMOVE_ELEM);
+        else if (text == "(")
+            addBracket(true);
+        else if (text == ")")
+            addBracket(false);
+        else {
+            switch (key) {
+            case Qt::Key_Minus:      addOper(QChar(0x2212)); break; // '-'
+            case Qt::Key_Asterisk:   addOper(QChar(0x00D7)); break; // '*'
+            case Qt::Key_Slash:      addOper(QChar(0x00F7)); break; // '/'
+            case Qt::Key_Plus:       addOper('+');           break;
+            case Qt::Key_Period:     addPoint();             break;
+            case Qt::Key_Backspace:
+                if (keyEvent->modifiers() & Qt::ControlModifier)
+                    remove(REMOVE_STR);
+                else
+                    remove(REMOVE_ELEM);
+                break;
+            }
+        }
 
         return true;
     }
@@ -157,7 +184,7 @@ void Backend::ChangeSignASign(int index)
 {
     if (str[index] == QChar(0x2212)) // str[index] == '-'
     {
-        if ((index >= 1 && str[index - 1].isSymbol()) || index < 1)
+        if ((index >= 1 && str[index - 1].isSymbol()) || index < 1) // remove '-' in case: ..*- && -...
             str.remove(index, 1);
         else
             str[index] = QChar('+');

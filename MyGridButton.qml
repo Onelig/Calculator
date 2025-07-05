@@ -6,6 +6,8 @@ Button {
     id: root
     width: 87
     height: 50
+    Layout.preferredWidth: 100
+    Layout.preferredHeight: 100
     Layout.fillWidth: true
     Layout.fillHeight: true
 
@@ -25,8 +27,7 @@ Button {
     contentItem: Text {
         anchors.centerIn: parent
         text: root.text
-        color: "black"
-        font.pixelSize: 16
+        font.pixelSize: Math.min(parent.width, parent.height) * 0.35
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
