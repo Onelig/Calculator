@@ -1,7 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 2.15
-import Calculator 1.0
+import Backend 1.0 
 
 Window
 {

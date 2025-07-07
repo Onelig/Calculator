@@ -6,6 +6,8 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    qmlRegisterType<Backend>("Backend", 1, 0, "Backend");
+
     QQmlApplicationEngine engine;
     QObject::connect(
         &engine,
@@ -14,7 +16,6 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    engine.loadFromModule("Calculator", "Main");
-
+    engine.load("qrc:/Main.qml");
     return app.exec();
 }

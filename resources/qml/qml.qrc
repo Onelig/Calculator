@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix = "/">
+        <file>Main.qml</file>
+        <file>MyGridButton.qml</file>
+    </qresource>
+</RCC>
