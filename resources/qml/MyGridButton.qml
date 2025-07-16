@@ -14,7 +14,7 @@ Button {
     background: Rectangle {
         anchors.fill: parent
         radius: 7
-        color: parent.pressed ? "#dcdcdc" : parent.hovered ? "#f0f0f0" : "#B0B0B0"
+        color: parent.pressed ? "#dcdcdc" : (parent.hovered ? "#f0f0f0" : "#B0B0B0")
         border.color: "#B0B0B0"
         border.width: 1
         Behavior on color {

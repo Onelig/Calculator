@@ -41,7 +41,7 @@ Window
         MyGridButton {
             id: button_percent
             text: "%"
-            onClicked: backend.addOper("%")
+            onClicked: backend.addPercent()
         }
 
         MyGridButton {
@@ -58,31 +58,31 @@ Window
 
         MyGridButton {
             id: button_remove_elem
-            text: qsTr("\u232B")
+            text: "\u232B"
             onClicked: backend.remove(Backend.REMOVE_ELEM)
         }
 
         MyGridButton {
             id: button_root
-            text: qsTr("\u221Ax")
+            text: "\u221Ax"
             onClicked: backend.addRoot()
         }
 
         MyGridButton {
             id: button_lbr
-            text: qsTr("(")
+            text: "("
             onClicked: backend.addBracket(true)
         }
 
         MyGridButton {
             id: button_rbr
-            text: qsTr(")")
+            text: ")"
             onClicked: backend.addBracket(false)
         }
 
         MyGridButton {
             id: button_division
-            text: qsTr("\u00F7")
+            text: "\u00F7"
             onClicked: backend.addOper(text)
         }
 
@@ -107,7 +107,7 @@ Window
 
         MyGridButton {
             id: button_mult
-            text: qsTr("\u00D7")
+            text: "\u00D7"
             onClicked: backend.addOper(text)
         }
 
@@ -131,7 +131,7 @@ Window
 
         MyGridButton {
             id: button_minus
-            text: qsTr("\u2212")
+            text: "\u2212"
             onClicked: backend.addOper(text)
         }
 
@@ -161,7 +161,7 @@ Window
 
         MyGridButton {
             id: button_change_sign
-            text: qsTr("\u00B1")
+            text: "\u00B1"
             onClicked: backend.changeSign()
         }
 
@@ -251,6 +251,7 @@ Window
         TextInput {
             id: textInput_enter_oper
             text: str
+            cursorVisible: true
             font.pixelSize: textInput_enter_oper.height / 1.3
             horizontalAlignment: Text.AlignRight
             verticalAlignment: Text.AlignBottom
@@ -264,6 +265,5 @@ Window
             wrapMode: TextEdit.NoWrap
             readOnly: true
         }
-
     }
 }

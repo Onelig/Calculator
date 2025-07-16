@@ -22,12 +22,12 @@ public:
     explicit Backend(QObject *parent = nullptr);
     Q_INVOKABLE void remove(RemoveMode mode);
     Q_INVOKABLE void addDigit(const QChar& digit);
-    Q_INVOKABLE void addOper(const QChar& oper);
+    Q_INVOKABLE void addOper(const QChar& oper); // Just PLUS, MINUS, MULTIPLY, DIVIDE
     Q_INVOKABLE void changeSign();
     Q_INVOKABLE void addPoint();
     Q_INVOKABLE void addRoot();
-    Q_INVOKABLE void addBracket(bool isOpen);
     Q_INVOKABLE void addPercent();
+    Q_INVOKABLE void addBracket(bool isOpen);
 
 signals:
     void strUpdated(const QString &newStr);
@@ -37,8 +37,11 @@ protected:
 
 private:
     QString str;
+    int lr_brackets = 0; // left and right button
+    // bool isAllowRBracket = false;
     void ChangeSignASign(int index);
-
+    bool isSymbol(const QChar& element);
+    void CorrectChop();
 };
 
 #endif // BACKEND_H

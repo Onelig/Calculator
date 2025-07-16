@@ -1,6 +1,7 @@
 #include "backend.h"
 #include <QKeyEvent>
 #include <QRegularExpression>
+#include "symbols.h"
 
 Backend::Backend(QObject *parent)
     : QObject{parent}
@@ -14,23 +15,34 @@ void Backend::remove(RemoveMode mode)
     {
     case REMOVE_ELEM:
         if (!str.isEmpty())
-            str.chop(1);
+            CorrectChop();
+
         break;
+
     case REMOVE_ALL:
+        lr_brackets = 0;
         str.clear();
         break;
+
     case REMOVE_STR:
     {
-        auto iter = std::find_if(str.rbegin(), str.rend(), [](const QChar& a){ return a.isSymbol(); });
-        if (iter == str.rend())
-            str.clear();
-        else
+        auto iter = std::find_if(str.rbegin(), str.rend(), [this](const QChar& a)
+                                {
+                                    if      (a == LPAREN) lr_brackets--;
+                                    else if (a == RPAREN) lr_brackets++;
+                                    return isSymbol(a);
+                                });
+
+        auto nextIter = std::next(iter);
+        while (nextIter != str.rend() && isSymbol(*nextIter))
         {
-            if ((iter + 1)->isSymbol())
-                ++iter;
-            int index = iter.base() - 1 - str.begin();
-            str.remove(index, str.size() - index);
+            iter = nextIter++;
+            if      (*(iter) == LPAREN) lr_brackets--;
+            else if (*(iter) == RPAREN) lr_brackets++;
         }
+        int index = iter.base() - 1 - str.begin();
+        str.remove(index, str.size() - index);
+
         break;
     }
     }
@@ -38,18 +50,25 @@ void Backend::remove(RemoveMode mode)
     emit strUpdated(str);
 }
 
-//void Backend::addElem(const QChar &elem_)
-//{
-//    if (elem_.isDigit())
-//        addDigit(elem_);
-//
-//    else if (elem_.isSymbol())
-//        addOper(elem_);
-//}
-
 void Backend::addDigit(const QChar &digit)
 {
-    str += digit;
+    bool allow = true;
+
+    if (digit == QChar('0') && !str.isEmpty())
+    {
+        if (str == "0")
+            allow = false;
+        else if (str.back() == QChar('0') && str.size() > 1)
+        {
+            QChar prevElem = str[str.size() - 2];
+            if (isSymbol(prevElem) && prevElem != DOT)
+                allow = false;
+        }
+    }
+
+    if (allow)
+        str += digit;
+
     emit strUpdated(str);
 }
 
@@ -57,20 +76,28 @@ void Backend::addOper(const QChar &oper)
 {
     if (!str.isEmpty())
     {
-        if(str.back() == QChar('.'))
-            str.chop(1);
-
-        if (str.back().isSymbol() && !(oper == QChar(0x2212) && str.back() != QChar(0x2212) && str.back() != QChar('+'))) // '-'
+        if (nonBOperatorFollowChars.indexOf(str.back()) != -1)
         {
-            if (str.size() >= 2 && !str[str.size() - 2].isSymbol())
-                str.back() = oper;
+            if (oper == MINUS && (str.back() == ROOT || str.back() == LPAREN || str.back() == DIVIDE || str.back() == MULTIPLY))
+            {
+                str.push_back(MINUS);
+            }
+            else if (str.size() >= 2 && nonBOperatorFollowChars.indexOf(str[str.size() - 2]) != -1)
+            {
+                if (oper == PLUS && (str[str.size() - 2] == DIVIDE || str[str.size() - 2] == MULTIPLY))
+                    CorrectChop();
+            }
+            else if (str.size() >= 2)
+            {
+                CorrectChop();
+                str.push_back(oper);
+            }
         }
         else
-            str += oper;
+            str.push_back(oper);
     }
-    else if (oper == QChar(0x2212))
-        str = QChar(0x2212);
-
+    else if (oper == MINUS)
+        str = MINUS;
 
     emit strUpdated(str);
 }
@@ -79,18 +106,12 @@ void Backend::changeSign()
 {
     if (!str.isEmpty())
     {
-        if (str.back().isSymbol())
-            ChangeSignASign(str.size() - 1);
+        auto iter = std::find_if(str.rbegin(), str.rend(), [this](const QChar& a){ return a != DOT && isSymbol(a); });
+        if (iter == str.rend())
+            str.prepend(MINUS);
 
         else
-        {
-            auto iter = std::find_if(str.rbegin(), str.rend(), [](const QChar& a){ return a.isSymbol(); });
-            if (iter == str.rend())
-                str.prepend(QChar(0x2212));
-
-            else
-                ChangeSignASign(iter.base() - 1 - str.begin());
-        }
+            ChangeSignASign(std::distance(str.begin(), iter.base()) - 1);
     }
 
     emit strUpdated(str);
@@ -100,24 +121,23 @@ void Backend::addPoint()
 {
     if (!str.isEmpty())
     {
-        bool pinStr = str.rbegin()->isSymbol();
+        bool issymbol = isSymbol(str.back());
 
-        if (!pinStr)
+        if (!issymbol)
         {
             for (auto iter = str.rbegin(), rend = str.rend(); iter != rend; ++iter)
             {
-                if (iter->isSymbol())
-                    break;
-
-                else if (*iter == QChar('.'))
+                if (*iter == DOT)
                 {
-                    pinStr = true;
-                   break;
+                    issymbol = true;
+                    break;
                 }
+                else if (isSymbol(*iter))
+                    break;
             }
 
-            if (!pinStr)
-                str.push_back('.');
+            if (!issymbol)
+                str.push_back(DOT);
         }
     }
 
@@ -126,20 +146,54 @@ void Backend::addPoint()
 
 void Backend::addRoot()
 {
-    str.push_back(QChar(0x221A));
-    emit strUpdated(str);
-}
+    if (!str.isEmpty() && str.back() == DOT)
+        str.chop(1);
 
-void Backend::addBracket(bool isOpen)
-{
-    str.push_back(QChar(isOpen ? '(' : ')'));
-
+    str.push_back(ROOT);
     emit strUpdated(str);
 }
 
 void Backend::addPercent()
 {
-    str.push_back(QChar('%'));
+    if (!str.isEmpty())
+    {
+        bool isLastSym = isSymbol(str.back());
+
+        bool isAddPercent = !isLastSym;
+        if (isLastSym)
+        {
+            if (str.back() == PERCENT || str.back() == RPAREN)
+                isAddPercent = true;
+
+            else if (str.size() >= 2 && !isSymbol(str[str.size() - 2]))
+            {
+                CorrectChop();
+                isAddPercent = true;
+            }
+        }
+
+        if (isAddPercent)
+            str.push_back(PERCENT);
+    }
+
+    emit strUpdated(str);
+}
+
+void Backend::addBracket(bool isOpen)
+{
+    if (!str.isEmpty() && str.back() == DOT)
+        str.chop(1);
+
+    if (isOpen) // '(' - LPAREN
+    {
+        ++lr_brackets;
+        str.push_back(LPAREN);
+    }
+    else if (lr_brackets > 0 && str.back() != LPAREN) // ')' - RPAREN
+    {
+        --lr_brackets;
+        str.push_back(RPAREN);
+    }
 
     emit strUpdated(str);
 }
@@ -150,26 +204,28 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
         const int key = keyEvent->key();
-        const QString text = keyEvent->text();
+        const QString textStr = keyEvent->text();
 
-        if (text.contains(QRegularExpression("[0-9]")))
-            addDigit(keyEvent->text().back());
-        else if (text == "(")
-            addBracket(true);
-        else if (text == ")")
-            addBracket(false);
-        else {
-            switch (key) {
-            case Qt::Key_Minus:      addOper(QChar(0x2212)); break; // '-'
-            case Qt::Key_Asterisk:   addOper(QChar(0x00D7)); break; // '*'
-            case Qt::Key_Slash:      addOper(QChar(0x00F7)); break; // '/'
-            case Qt::Key_Plus:       addOper('+');           break;
-            case Qt::Key_Period:     addPoint();             break;
+        if (!textStr.isEmpty() && QRegularExpression("[0-9]").match(textStr.back()).hasMatch())
+            addDigit(textStr.back());
+        else
+        {
+            switch (key)
+            {
+            case Qt::Key_Minus:      addOper(MINUS);      break;
+            case Qt::Key_Asterisk:   addOper(MULTIPLY);   break;
+            case Qt::Key_Slash:      addOper(DIVIDE);     break;
+            case Qt::Key_Plus:       addOper(PLUS);       break;
+            case Qt::Key_Period:     addPoint();          break;
+            case Qt::Key_Percent:    addPercent();        break;
+            case Qt::Key_ParenLeft:  addBracket(true);    break;
+            case Qt::Key_ParenRight: addBracket(false);   break;
             case Qt::Key_Backspace:
                 if (keyEvent->modifiers() & Qt::ControlModifier)
                     remove(REMOVE_STR);
                 else
                     remove(REMOVE_ELEM);
+
                 break;
             }
         }
@@ -182,16 +238,33 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
 
 void Backend::ChangeSignASign(int index)
 {
-    if (str[index] == QChar(0x2212)) // str[index] == '-'
+    QChar &elem = str[index];
+    if (elem == MINUS)
     {
-        if ((index >= 1 && str[index - 1].isSymbol()) || index < 1) // remove '-' in case: ..*- && -...
+        if ((index >= 1 && NneedSignClarif.indexOf(str[index - 1]) != -1) || index < 1)
             str.remove(index, 1);
+
         else
-            str[index] = QChar('+');
+            elem = PLUS;
     }
-    else if (str[index] == QChar('+')) // str[index] == '+'
-        str[index] = QChar(0x2212); // '-'
+    else if (elem == PLUS)
+        elem = MINUS;
 
     else
-        str.insert(index + 1, QChar(0x2212));
+        str.insert(index + 1, MINUS);
+}
+
+bool Backend::isSymbol(const QChar &element)
+{
+    return csymbols.indexOf(element) != -1;
+}
+
+void Backend::CorrectChop()
+{
+    QChar lastElem = str.back();
+
+    if      (lastElem == LPAREN) lr_brackets--;
+    else if (lastElem == RPAREN) lr_brackets++;
+
+    str.chop(1);
 }
