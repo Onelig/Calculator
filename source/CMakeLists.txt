@@ -5,13 +5,15 @@ qt_add_executable(appCalculator
     ${QML_RESOURCES}
     backend/backend.cpp
     lexer/lexer.cpp
+    parser/parser.cpp
 
     symbols/symbols.h
     lexer/lexer.h
     backend/backend.h
+    parser/parser.h
 )
 
-target_include_directories(appCalculator PRIVATE backend lexer symbols)
+target_include_directories(appCalculator PRIVATE symbols backend lexer parser)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

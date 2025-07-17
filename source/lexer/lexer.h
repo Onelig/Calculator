@@ -15,17 +15,18 @@ enum TokenType
     TOKEN_PRECENT // '%'
 };
 
-struct Token
+struct Token final
 {
     const TokenType type;
-    const QString value;
+    const double value;
 };
 
-class Lexer
+class Lexer final
 {
 private:
     std::list<Token> tokens;
 
 public:
     explicit Lexer(const QString& expr);
+    const std::list<Token>& getLexema();
 };
