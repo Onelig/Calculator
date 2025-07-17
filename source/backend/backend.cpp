@@ -254,11 +254,6 @@ void Backend::ChangeSignASign(int index)
         str.insert(index + 1, MINUS);
 }
 
-bool Backend::isSymbol(const QChar &element)
-{
-    return csymbols.indexOf(element) != -1;
-}
-
 void Backend::CorrectChop()
 {
     QChar lastElem = str.back();

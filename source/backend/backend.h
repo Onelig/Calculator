@@ -40,7 +40,6 @@ private:
     int lr_brackets = 0; // left and right button
     // bool isAllowRBracket = false;
     void ChangeSignASign(int index);
-    bool isSymbol(const QChar& element);
     void CorrectChop();
 };
 
