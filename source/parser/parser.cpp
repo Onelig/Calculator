@@ -8,6 +8,11 @@ Node::Node(TokenType oper, std::shared_ptr<Node> left, std::shared_ptr<Node> rig
     : oper(oper), right(std::move(right)), left(std::move(left))
 { }
 
+double Node::getValue()
+{
+    return value;
+}
+
 Token Parser::peek()
 {
     return *iter;
@@ -65,4 +70,9 @@ Parser::Parser(const std::list<Token> &lexema)
     : iter(lexema.cbegin())
 {
     root = minPriorityBOper();
+}
+
+std::shared_ptr<Node> Parser::getTree()
+{
+    return std::move(root);
 }

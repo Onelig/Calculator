@@ -1,22 +1,21 @@
 #pragma once
 #include "lexer.h"
-#include <list>
 #include <memory>
 
 class Node final
 {
 private:
     double value;
-    TokenType oper;
 
 public:
     std::shared_ptr<Node> right;
     std::shared_ptr<Node> left;
 
+    const TokenType oper;
 public:
-    Node(double value, std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
+    Node(double value,   std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
     Node(TokenType oper, std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
-
+    double getValue(); // when oper == TOKEN_NUMBER
 };
 
 class Parser final
@@ -37,4 +36,5 @@ private: // main methods
 
 public:
     explicit Parser(const std::list<Token>& lexema);
+    std::shared_ptr<Node> getTree();
 };
