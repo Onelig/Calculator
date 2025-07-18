@@ -12,7 +12,8 @@ enum TokenType
     TOKEN_MUL,    // '*'
     TOKEN_DIV,    // '/'
     TOKEN_ROOT,   // '√'
-    TOKEN_PRECENT // '%'
+    TOKEN_PRECENT,// '%'
+    TOKEN_END     // end of operators
 };
 
 struct Token final

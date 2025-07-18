@@ -13,8 +13,8 @@ Lexer::Lexer(const QString &expr)
             if (isOperMSkipped)
             {
                 tokens.push_back(Token{TOKEN_MUL});
-                isOperMSkipped = false;
             }
+            isOperMSkipped = true;
 
             QString::const_iterator itnum_end = std::find_if(citer + 1, expr.cend(), [](QChar element){ return element != DOT && isSymbol(element); });
             tokens.push_back(Token{TOKEN_NUMBER, expr.mid(std::distance(expr.cbegin(), citer), std::distance(citer, itnum_end)).toDouble()});
@@ -73,10 +73,13 @@ Lexer::Lexer(const QString &expr)
         else if (*citer == PERCENT)
         {
             isOperMSkipped = true;
-            tokens.push_back(Token{TOKEN_PRECENT});
+            tokens.push_back(Token{TOKEN_DIV});
+            tokens.push_back(Token{TOKEN_NUMBER, 100});
             ++citer;
         }
     }
+
+    tokens.push_back(Token{TOKEN_END});
 }
 
 const std::list<Token> &Lexer::getLexema()
