@@ -28,6 +28,7 @@ public:
     Q_INVOKABLE void addRoot();
     Q_INVOKABLE void addPercent();
     Q_INVOKABLE void addBracket(bool isOpen);
+    Q_INVOKABLE void getResult();
 
 signals:
     void strUpdated(const QString &newStr);

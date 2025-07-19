@@ -180,6 +180,7 @@ Window
         MyGridButton {
             id: button_equal
             text: "="
+            onClicked: backend.getResult();
         }
     }
 

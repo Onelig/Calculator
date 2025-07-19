@@ -2,6 +2,7 @@
 #include <QKeyEvent>
 #include <QRegularExpression>
 #include "symbols.h"
+#include "evaluator.h"
 
 Backend::Backend(QObject *parent)
     : QObject{parent}
@@ -194,6 +195,16 @@ void Backend::addBracket(bool isOpen)
         --lr_brackets;
         str.push_back(RPAREN);
     }
+
+    emit strUpdated(str);
+}
+
+void Backend::getResult()
+{
+    Lexer lexer(str);
+    Parser parser(lexer.getLexema());
+    Evaluator eval(parser.getTree());
+    str = QString::number(eval.getResult());
 
     emit strUpdated(str);
 }

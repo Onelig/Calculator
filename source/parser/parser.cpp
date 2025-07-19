@@ -46,23 +46,25 @@ std::shared_ptr<Node> Parser::UOper() // '√', '(', ')', U'-'
 
 std::shared_ptr<Node> Parser::maxPriorityBOper() // '*', '/'
 {
-    std::shared_ptr<Node> loperand = UOper(),
-                          result   = nullptr;
+    std::shared_ptr<Node> result = UOper();
 
     while (peek().type == TOKEN_MUL || peek().type == TOKEN_DIV)
-        result = std::make_shared<Node>(get().type, (result ? result : loperand), UOper());
-
+    {
+        auto type = get().type;
+        result = std::make_shared<Node>(type, result, UOper());
+    }
     return result;
 }
 
 std::shared_ptr<Node> Parser::minPriorityBOper() // '+', '-'
 {
-    std::shared_ptr<Node> loperand = maxPriorityBOper(),
-                          result   = nullptr;
+    std::shared_ptr<Node> result = maxPriorityBOper();
 
     while (peek().type == TOKEN_PLUS || peek().type == TOKEN_MINUS)
-        result = std::make_shared<Node>(get().type, (result ? result : loperand), maxPriorityBOper());
-
+    {
+        auto type = get().type;
+        result = std::make_shared<Node>(type, result, maxPriorityBOper());
+    }
     return result;
 }
 
