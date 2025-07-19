@@ -132,7 +132,7 @@ Window
         MyGridButton {
             id: button_minus
             text: "\u2212"
-            onClicked: backend.addOper(text)
+            onClicked: backend.addOper('-')
         }
 
         MyGridButton {

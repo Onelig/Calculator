@@ -31,8 +31,10 @@ std::shared_ptr<Node> Parser::getNum()
 std::shared_ptr<Node> Parser::UOper() // '√', '(', ')', U'-'
 {
     if (peek().type == TOKEN_ROOT || peek().type == TOKEN_MINUS)
-        return std::make_shared<Node>(get().type, UOper());
-
+    {
+        auto type = get().type;
+        return std::make_shared<Node>(type, UOper());
+    }
     else if (peek().type == TOKEN_LPAREN)
     {
         get();
