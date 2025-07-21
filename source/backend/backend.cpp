@@ -3,7 +3,7 @@
 #include <QRegularExpression>
 #include "symbols.h"
 #include "evaluator.h"
-
+#include <iostream>
 Backend::Backend(QObject *parent)
     : QObject{parent}
 {
@@ -31,18 +31,25 @@ void Backend::remove(RemoveMode mode)
                                 {
                                     if      (a == LPAREN) lr_brackets--;
                                     else if (a == RPAREN) lr_brackets++;
-                                    return isSymbol(a);
+                                    return a != DOT && isSymbol(a);
                                 });
-
-        auto nextIter = std::next(iter);
-        while (nextIter != str.rend() && isSymbol(*nextIter))
+        if (iter == str.rend())
         {
-            iter = nextIter++;
-            if      (*(iter) == LPAREN) lr_brackets--;
-            else if (*(iter) == RPAREN) lr_brackets++;
+            lr_brackets = 0;
+            str.clear();
         }
-        int index = iter.base() - 1 - str.begin();
-        str.remove(index, str.size() - index);
+        else
+        {
+            auto nextIter = std::next(iter);
+            while (nextIter != str.rend() && (*nextIter) != DOT && isSymbol(*nextIter))
+            {
+                iter = nextIter++;
+                if      (*(iter) == LPAREN) lr_brackets--;
+                else if (*(iter) == RPAREN) lr_brackets++;
+            }
+            int index = iter.base() - 1 - str.begin();
+            str.remove(index, str.size() - index);
+        }
 
         break;
     }
@@ -55,15 +62,25 @@ void Backend::addDigit(const QChar &digit)
 {
     bool allow = true;
 
-    if (digit == QChar('0') && !str.isEmpty())
+    if (!str.isEmpty())
     {
         if (str == "0")
-            allow = false;
+        {
+            if (digit == QChar('0'))
+                allow = false;
+            else
+                str.chop(1);
+        }
         else if (str.back() == QChar('0') && str.size() > 1)
         {
             QChar prevElem = str[str.size() - 2];
-            if (isSymbol(prevElem) && prevElem != DOT)
-                allow = false;
+            if (prevElem != DOT && isSymbol(prevElem))
+            {
+                if (digit == QChar('0'))
+                    allow = false;
+                else
+                    str.chop(1);
+            }
         }
     }
 
@@ -204,7 +221,7 @@ void Backend::getResult()
     Lexer lexer(str);
     Parser parser(lexer.getLexema());
     Evaluator eval(parser.getTree());
-    str = QString::number(eval.getResult());
+    str = eval.getResult();
 
     emit strUpdated(str);
 }
@@ -231,6 +248,7 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
             case Qt::Key_Percent:    addPercent();        break;
             case Qt::Key_ParenLeft:  addBracket(true);    break;
             case Qt::Key_ParenRight: addBracket(false);   break;
+            case Qt::Key_Equal:      getResult();         break;
             case Qt::Key_Backspace:
                 if (keyEvent->modifiers() & Qt::ControlModifier)
                     remove(REMOVE_STR);

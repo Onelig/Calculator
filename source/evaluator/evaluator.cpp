@@ -1,7 +1,6 @@
 #include "evaluator.h"
-#include <math.h>
 
-double Evaluator::getResult_(std::shared_ptr<Node> root_)
+boost::multiprecision::cpp_dec_float_100 Evaluator::getResult_(std::shared_ptr<Node> root_)
 {
     switch (root_->oper)
     {
@@ -9,7 +8,7 @@ double Evaluator::getResult_(std::shared_ptr<Node> root_)
         return root_->getValue();
 
     case TOKEN_ROOT:
-        return std::sqrt(getResult_(root_->left));
+        return sqrt(getResult_(root_->left));
 
     case TOKEN_MINUS:
         if (root_->right)
@@ -35,7 +34,15 @@ Evaluator::Evaluator(std::shared_ptr<Node> root)
     : root(std::move(root))
 { }
 
-double Evaluator::getResult()
+QString Evaluator::getResult()
 {
-    return getResult_(root);
+    std::string str = getResult_(root).str(5, std::ios_base::fixed);
+
+    while (!str.empty() && str.back() == '0')
+        str.pop_back();
+
+    if (!str.empty() && str.back() == '.')
+        str.pop_back();
+
+    return QString::fromStdString(str);
 }

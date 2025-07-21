@@ -11,13 +11,12 @@ Lexer::Lexer(const QString &expr)
         if (citer->isDigit())
         {
             if (isOperMSkipped)
-            {
                 tokens.push_back(Token{TOKEN_MUL});
-            }
+
             isOperMSkipped = true;
 
             QString::const_iterator itnum_end = std::find_if(citer + 1, expr.cend(), [](QChar element){ return element != DOT && isSymbol(element); });
-            tokens.push_back(Token{TOKEN_NUMBER, expr.mid(std::distance(expr.cbegin(), citer), std::distance(citer, itnum_end)).toDouble()});
+            tokens.push_back(Token{TOKEN_NUMBER, std::make_shared<boost::multiprecision::cpp_dec_float_100>(expr.mid(std::distance(expr.cbegin(), citer), std::distance(citer, itnum_end)).toStdString())});
             citer = itnum_end;
         }
         else if (*citer == PLUS)
@@ -74,7 +73,7 @@ Lexer::Lexer(const QString &expr)
         {
             isOperMSkipped = true;
             tokens.push_back(Token{TOKEN_DIV});
-            tokens.push_back(Token{TOKEN_NUMBER, 100});
+            tokens.push_back(Token{TOKEN_NUMBER, std::make_shared<boost::multiprecision::cpp_dec_float_100>("100")});
             ++citer;
         }
     }

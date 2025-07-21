@@ -1,24 +1,24 @@
 #include "parser.h"
 
-Node::Node(double value, std::shared_ptr<Node> left, std::shared_ptr<Node> right)
-    : value(value), oper(TOKEN_NUMBER), right(std::move(right)), left(std::move(left))
+Node::Node(std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value, std::shared_ptr<Node> left, std::shared_ptr<Node> right)
+    : value(std::move(value)), oper(TOKEN_NUMBER), right(std::move(right)), left(std::move(left))
 { }
 
 Node::Node(TokenType oper, std::shared_ptr<Node> left, std::shared_ptr<Node> right)
     : oper(oper), right(std::move(right)), left(std::move(left))
 { }
 
-double Node::getValue()
+boost::multiprecision::cpp_dec_float_100 Node::getValue()
 {
-    return value;
+    return *value;
 }
 
-Token Parser::peek()
+const Token& Parser::peek()
 {
     return *iter;
 }
 
-Token Parser::get()
+const Token& Parser::get()
 {
     return *(iter++);
 }

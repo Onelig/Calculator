@@ -5,9 +5,9 @@ class Evaluator
 {
 private:
     std::shared_ptr<Node> root;
-    double getResult_(std::shared_ptr<Node> root_);
+    boost::multiprecision::cpp_dec_float_100 getResult_(std::shared_ptr<Node> root_);
 
 public:
     explicit Evaluator(std::shared_ptr<Node> root);
-    double getResult();
+    QString getResult();
 };

@@ -1,6 +1,7 @@
 #pragma once
 #include <QString>
 #include <list>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 enum TokenType
 {
@@ -19,7 +20,7 @@ enum TokenType
 struct Token final
 {
     const TokenType type;
-    const double value;
+    const std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value;
 };
 
 class Lexer final

@@ -5,7 +5,7 @@
 class Node final
 {
 private:
-    double value;
+    std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value;
 
 public:
     std::shared_ptr<Node> right;
@@ -13,9 +13,9 @@ public:
 
     const TokenType oper;
 public:
-    Node(double value,   std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
+    Node(std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value, std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
     Node(TokenType oper, std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
-    double getValue(); // when oper == TOKEN_NUMBER
+    boost::multiprecision::cpp_dec_float_100 getValue(); // when oper == TOKEN_NUMBER
 };
 
 class Parser final
@@ -25,8 +25,8 @@ private: // fields
 
 private: // useful instruments
     std::list<Token>::const_iterator iter;
-    Token peek();
-    Token get();
+    const Token& peek();
+    const Token& get();
 
 private: // main methods
     std::shared_ptr<Node> getNum();
