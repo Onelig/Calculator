@@ -13,7 +13,9 @@ Window
     minimumHeight: 470
     minimumWidth: 400
     title: qsTr("Calculator")
+
     property string str: ""
+    property string hist: ""
 
     Backend
     {
@@ -21,6 +23,10 @@ Window
         onStrUpdated: (newStr) => {
                           str = newStr
                       }
+
+        onHistUpdated: (newHist) => {
+                          hist = newHist
+                       }
     }
 
     GridLayout {
@@ -201,20 +207,20 @@ Window
 
         Button {
             id: button_show_hist
-            text: qsTr("\u21BA")
+            text: "\u21BA" // или замени на иконку 🕘 или 🕓
             display: AbstractButton.TextOnly
-            Layout.fillHeight: true
-            Layout.preferredWidth: height
-            Layout.preferredHeight: 0.2 * columnLayout.height // 20 %
+            Layout.preferredHeight: 40
+            Layout.preferredWidth: 40
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 6
 
             background: Rectangle {
                 anchors.fill: parent
                 radius: 7
                 color: parent.pressed ? "#dcdcdc" : parent.hovered ? "#f0f0f0" : "white"
                 Behavior on color {
-                    ColorAnimation {
-                        duration: 150
-                    }
+                    ColorAnimation { duration: 150 }
                 }
             }
 
@@ -222,7 +228,7 @@ Window
                 text: button_show_hist.text
                 anchors.fill: parent
                 color: "black"
-                font.pixelSize: 16
+                font.pixelSize: 20
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
@@ -238,12 +244,11 @@ Window
 
             Text {
                 id: text_hist
-                text: qsTr("48 * 91")
+                text: hist
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                anchors.topMargin: 10
-                font.pixelSize: list_history.height / 1.3
+                font.pixelSize: list_history.height * 1.4
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignBottom
             }
@@ -261,7 +266,7 @@ Window
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredHeight: 0.65 * columnLayout.height // 65 %
+            Layout.preferredHeight: 0.63 * columnLayout.height // 63 %
             focus: true
             wrapMode: TextEdit.NoWrap
             readOnly: true

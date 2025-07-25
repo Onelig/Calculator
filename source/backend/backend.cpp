@@ -3,7 +3,7 @@
 #include <QRegularExpression>
 #include "symbols.h"
 #include "evaluator.h"
-#include <iostream>
+
 Backend::Backend(QObject *parent)
     : QObject{parent}
 {
@@ -221,9 +221,11 @@ void Backend::getResult()
     Lexer lexer(str);
     Parser parser(lexer.getLexema());
     Evaluator eval(parser.getTree());
+    QString last_str = str;
     str = eval.getResult();
 
     emit strUpdated(str);
+    emit histUpdated(last_str);
 }
 
 bool Backend::eventFilter(QObject *object, QEvent *event)

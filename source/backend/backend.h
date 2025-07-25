@@ -32,6 +32,7 @@ public:
 
 signals:
     void strUpdated(const QString &newStr);
+    void histUpdated(const QString& newHist);
 
 protected:
     bool eventFilter(QObject *object, QEvent *event);
