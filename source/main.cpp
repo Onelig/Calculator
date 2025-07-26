@@ -16,6 +16,6 @@ int main(int argc, char *argv[])
         []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
 
-    engine.load("qrc:/Main.qml");
+    engine.load("qrc:/main.qml");
     return app.exec();
 }

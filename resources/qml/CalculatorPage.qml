@@ -1,21 +1,13 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 2.15
-import Backend 1.0 
+import Backend 1.0
 
-Window
-{
-    id: window
-    width: 400
-    height: 470
-
-    visible: true
-    minimumHeight: 470
-    minimumWidth: 400
-    title: qsTr("Calculator")
-
+Item {
+    id: сaclPage
     property string str: ""
     property string hist: ""
+    signal buttonClicked()
 
     Backend
     {
@@ -186,7 +178,7 @@ Window
         MyGridButton {
             id: button_equal
             text: "="
-            onClicked: backend.getResult();
+            onClicked: backend.getResult()
         }
     }
 
@@ -246,16 +238,16 @@ Window
 
     Button {
         id: button_show_hist
-            text: "\u21BA"
-            anchors.top: parent.top
-            anchors.right: parent.right
-            anchors.topMargin: 8
-            anchors.rightMargin: 8
-            
-            property real baseSize: Math.min(Math.max(parent.height  * 0.08, 24), 50)
+        text: "\u21BA"
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 8
+        anchors.rightMargin: 8
 
-            width: baseSize
-            height: baseSize
+        property real baseSize: Math.min(Math.max(parent.height  * 0.08, 24), 50)
+
+        width: baseSize
+        height: baseSize
 
         background: Rectangle {
             anchors.fill: parent
@@ -270,9 +262,11 @@ Window
             text: button_show_hist.text
             anchors.fill: parent
             color: "black"
-            font.pixelSize: width * 0.5  // динамический размер текста
+            font.pixelSize: width * 0.5
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }
+
+        onClicked: сaclPage.buttonClicked()
     }
 }
