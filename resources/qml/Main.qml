@@ -25,7 +25,7 @@ Window
                       }
 
         onHistUpdated: (newHist) => {
-                          hist = newHist
+                           hist = newHist
                        }
     }
 
@@ -194,45 +194,16 @@ Window
         id: columnLayout
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        anchors.top: button_show_hist.bottom
+        anchors.bottom: gridLayout.top
         anchors.leftMargin: 8
         anchors.rightMargin: 8
         anchors.topMargin: 4
-        anchors.bottomMargin: 0.7 * window.height
+        anchors.bottomMargin: 5
         smooth: true
         enabled: true
         spacing: 0
         layoutDirection: Qt.RightToLeft
-
-        Button {
-            id: button_show_hist
-            text: "\u21BA" // или замени на иконку 🕘 или 🕓
-            display: AbstractButton.TextOnly
-            Layout.preferredHeight: 40
-            Layout.preferredWidth: 40
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.margins: 6
-
-            background: Rectangle {
-                anchors.fill: parent
-                radius: 7
-                color: parent.pressed ? "#dcdcdc" : parent.hovered ? "#f0f0f0" : "white"
-                Behavior on color {
-                    ColorAnimation { duration: 150 }
-                }
-            }
-
-            contentItem: Text {
-                text: button_show_hist.text
-                anchors.fill: parent
-                color: "black"
-                font.pixelSize: 20
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-        }
 
         Rectangle {
             id: list_history
@@ -240,7 +211,7 @@ Window
             Layout.alignment: Qt.AlignLeft | Qt.AlignTop
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredHeight: 0.15 * columnLayout.height // 15 %
+            Layout.preferredHeight: 0.15 * columnLayout.height // 20 %
 
             Text {
                 id: text_hist
@@ -248,7 +219,7 @@ Window
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top
-                font.pixelSize: list_history.height * 1.4
+                font.pixelSize: list_history.height * 1.6
                 horizontalAlignment: Text.AlignRight
                 verticalAlignment: Text.AlignBottom
             }
@@ -266,10 +237,42 @@ Window
             Layout.alignment: Qt.AlignLeft | Qt.AlignBottom
             Layout.fillHeight: true
             Layout.fillWidth: true
-            Layout.preferredHeight: 0.63 * columnLayout.height // 63 %
+            Layout.preferredHeight: 0.85 * columnLayout.height // 80 %
             focus: true
             wrapMode: TextEdit.NoWrap
             readOnly: true
+        }
+    }
+
+    Button {
+        id: button_show_hist
+            text: "\u21BA"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.topMargin: 8
+            anchors.rightMargin: 8
+            
+            property real baseSize: Math.min(Math.max(parent.height  * 0.08, 24), 50)
+
+            width: baseSize
+            height: baseSize
+
+        background: Rectangle {
+            anchors.fill: parent
+            radius: 7
+            color: parent.pressed ? "#dcdcdc" : parent.hovered ? "#f0f0f0" : "white"
+            Behavior on color {
+                ColorAnimation { duration: 150 }
+            }
+        }
+
+        contentItem: Text {
+            text: button_show_hist.text
+            anchors.fill: parent
+            color: "black"
+            font.pixelSize: width * 0.5  // динамический размер текста
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
     }
 }
