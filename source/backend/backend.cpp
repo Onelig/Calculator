@@ -218,6 +218,9 @@ void Backend::addBracket(bool isOpen)
 
 void Backend::getResult()
 {
+    while (!str.isEmpty() && isSymbol(str.back()))
+        str.chop(1);
+
     Lexer lexer(str);
     Parser parser(lexer.getLexema());
     Evaluator eval(parser.getTree());
@@ -226,9 +229,11 @@ void Backend::getResult()
 
     emit strUpdated(str);
     emit histUpdated(last_str);
-
-    history.push_back(last_str + QChar('=') + str);
-    emit getHistoryList();
+    if (str != last_str)
+    {
+        history.push_back(last_str + QChar('=') + str);
+        emit getHistoryList();
+    }
 }
 
 QStringList Backend::getHistoryList()
