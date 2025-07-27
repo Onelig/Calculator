@@ -81,7 +81,7 @@ Item {
             text: button_return.text
             anchors.fill: parent
             color: "black"
-            font.pixelSize: baseSize * 0.5
+            font.pixelSize: button_return.baseSize * 0.5
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
         }

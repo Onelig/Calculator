@@ -218,8 +218,8 @@ void Backend::addBracket(bool isOpen)
 
 void Backend::getResult()
 {
-    while (!str.isEmpty() && isSymbol(str.back()))
-        str.chop(1);
+    while (!str.isEmpty() && str.back() != RPAREN && str.back() != PERCENT && isSymbol(str.back()))
+        CorrectChop();
 
     Lexer lexer(str);
     Parser parser(lexer.getLexema());
@@ -263,7 +263,8 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
             case Qt::Key_Percent:    addPercent();        break;
             case Qt::Key_ParenLeft:  addBracket(true);    break;
             case Qt::Key_ParenRight: addBracket(false);   break;
-            case Qt::Key_Equal:      getResult();         break;
+            case Qt::Key_Equal:
+            case Qt::Key_Return:     getResult();         break;
             case Qt::Key_Backspace:
                 if (keyEvent->modifiers() & Qt::ControlModifier)
                     remove(REMOVE_STR);
