@@ -1,6 +1,8 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 2.15
+import MyBackend 1.0
+
 
 Item {
     id: сaclPage

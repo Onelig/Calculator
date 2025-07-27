@@ -7,6 +7,8 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
+    qmlRegisterUncreatableType<Backend>("MyBackend", 1, 0, "Backend", "Enum only");
+
     QQmlApplicationEngine engine;
     QObject::connect(
         &engine,
