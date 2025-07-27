@@ -226,6 +226,14 @@ void Backend::getResult()
 
     emit strUpdated(str);
     emit histUpdated(last_str);
+
+    history.push_back(last_str + QChar('=') + str);
+    emit getHistoryList();
+}
+
+QStringList Backend::getHistoryList()
+{
+    return history;
 }
 
 bool Backend::eventFilter(QObject *object, QEvent *event)

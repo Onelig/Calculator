@@ -9,6 +9,9 @@ class Backend : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
+
+    Q_PROPERTY(QStringList historyList READ getHistoryList NOTIFY historyListChanged)
+
 public:
     enum RemoveMode
     {
@@ -18,7 +21,7 @@ public:
     };
     Q_ENUM(RemoveMode)
 
-public:
+public: // for Calculator Page
     explicit Backend(QObject *parent = nullptr);
     Q_INVOKABLE void remove(RemoveMode mode);
     Q_INVOKABLE void addDigit(const QChar& digit);
@@ -30,10 +33,15 @@ public:
     Q_INVOKABLE void addBracket(bool isOpen);
     Q_INVOKABLE void getResult();
 
+
+public:// for History Page
+    QStringList getHistoryList();
+
 signals:
     void strUpdated(const QString &newStr);
     void histUpdated(const QString& newHist);
 
+    void historyListChanged();
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 
@@ -42,6 +50,7 @@ private:
     int lr_brackets = 0; // left and right button
     void ChangeSignASign(int index);
     void CorrectChop();
+    QStringList history;
 };
 
 #endif // BACKEND_H

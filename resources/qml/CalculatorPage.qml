@@ -1,7 +1,7 @@
 import QtQuick 6.2
 import QtQuick.Controls 6.2
 import QtQuick.Layouts 2.15
-import Backend 1.0
+//import Backend 1.0
 
 Item {
     id: сaclPage
@@ -9,21 +9,20 @@ Item {
     property string hist: ""
     signal buttonClicked()
 
-    Backend
-    {
-        id: backend
-        onStrUpdated: (newStr) => {
-                          str = newStr
-                      }
+    Connections {
+        target: backend
 
-        onHistUpdated: (newHist) => {
-                           hist = newHist
-                       }
+        function onStrUpdated(newStr) {
+            str = newStr
+        }
+
+        function onHistUpdated(newHist) {
+            hist = newHist
+        }
     }
 
     GridLayout {
         id: gridLayout
-        height: 293
         visible: true
         anchors.left: parent.left
         anchors.right: parent.right
