@@ -229,19 +229,22 @@ void Backend::getResult()
         while (!str.isEmpty() && str.back() != RPAREN && str.back() != PERCENT && isSymbol(str.back()))
             CorrectChop();
 
-        Lexer lexer(str);
-        Parser parser(lexer.getLexema());
-        Evaluator eval(parser.getTree());
-        QString last_str = str;
-        str = eval.getResult();
-
-        emit strUpdated(str);
-        if (str != last_str)
+        if (!str.isEmpty())
         {
-            emit histUpdated(last_str);
-            history.push_back(last_str + QChar('=') + str);
-            emit getHistoryList();
+            Lexer lexer(str);
+            Parser parser(lexer.getLexema());
+            Evaluator eval(parser.getTree());
+            QString last_str = str;
+            str = eval.getResult();
+
+            if (str != last_str)
+            {
+                emit histUpdated(last_str);
+                history.push_back(last_str + QChar('=') + str);
+                emit getHistoryList();
+            }
         }
+        emit strUpdated(str);
     }
     else
     {
@@ -265,6 +268,8 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
 
         if (!textStr.isEmpty() && QRegularExpression("[0-9]").match(textStr.back()).hasMatch())
             addDigit(textStr.back());
+        else if (!textStr.isEmpty() && textStr.back() == QChar('='))
+            getResult();
         else
         {
             switch (key)
@@ -277,7 +282,7 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
             case Qt::Key_Percent:    addPercent();        break;
             case Qt::Key_ParenLeft:  addBracket(true);    break;
             case Qt::Key_ParenRight: addBracket(false);   break;
-            case Qt::Key_Equal:
+            case Qt::Key_Enter:
             case Qt::Key_Return:     getResult();         break;
             case Qt::Key_Backspace:
                 if (keyEvent->modifiers() & Qt::ControlModifier)
