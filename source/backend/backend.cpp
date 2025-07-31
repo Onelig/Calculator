@@ -60,6 +60,7 @@ void Backend::remove(RemoveMode mode)
 
 void Backend::addDigit(const QChar &digit)
 {
+    ifHavePrevError();
     bool allow = true;
 
     if (!str.isEmpty())
@@ -92,6 +93,7 @@ void Backend::addDigit(const QChar &digit)
 
 void Backend::addOper(const QChar &oper)
 {
+    ifHavePrevError();
     if (!str.isEmpty())
     {
         if (nonBOperatorFollowChars.indexOf(str.back()) != -1)
@@ -164,6 +166,8 @@ void Backend::addPoint()
 
 void Backend::addRoot()
 {
+    ifHavePrevError();
+
     if (!str.isEmpty() && str.back() == DOT)
         str.chop(1);
 
@@ -199,6 +203,8 @@ void Backend::addPercent()
 
 void Backend::addBracket(bool isOpen)
 {
+    ifHavePrevError();
+
     if (!str.isEmpty() && str.back() == DOT)
         str.chop(1);
 
@@ -218,21 +224,29 @@ void Backend::addBracket(bool isOpen)
 
 void Backend::getResult()
 {
-    while (!str.isEmpty() && str.back() != RPAREN && str.back() != PERCENT && isSymbol(str.back()))
-        CorrectChop();
-
-    Lexer lexer(str);
-    Parser parser(lexer.getLexema());
-    Evaluator eval(parser.getTree());
-    QString last_str = str;
-    str = eval.getResult();
-
-    emit strUpdated(str);
-    emit histUpdated(last_str);
-    if (str != last_str)
+    if (lr_brackets == 0)
     {
-        history.push_back(last_str + QChar('=') + str);
-        emit getHistoryList();
+        while (!str.isEmpty() && str.back() != RPAREN && str.back() != PERCENT && isSymbol(str.back()))
+            CorrectChop();
+
+        Lexer lexer(str);
+        Parser parser(lexer.getLexema());
+        Evaluator eval(parser.getTree());
+        QString last_str = str;
+        str = eval.getResult();
+
+        emit strUpdated(str);
+        if (str != last_str)
+        {
+            emit histUpdated(last_str);
+            history.push_back(last_str + QChar('=') + str);
+            emit getHistoryList();
+        }
+    }
+    else
+    {
+        remove(REMOVE_ALL);
+        str = "the bracket is not closed";
     }
 }
 
@@ -307,4 +321,10 @@ void Backend::CorrectChop()
     else if (lastElem == RPAREN) lr_brackets++;
 
     str.chop(1);
+}
+
+void Backend::ifHavePrevError()
+{
+    if (!str.isEmpty() && str.back().isLetter())
+        str.clear();
 }

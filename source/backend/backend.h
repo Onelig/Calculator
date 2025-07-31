@@ -48,9 +48,11 @@ protected:
 private:
     QString str;
     int lr_brackets = 0; // left and right button
+    QStringList history;
+
     void ChangeSignASign(int index);
     void CorrectChop();
-    QStringList history;
+    void ifHavePrevError();
 };
 
 #endif // BACKEND_H
