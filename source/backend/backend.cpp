@@ -124,6 +124,8 @@ void Backend::addOper(const QChar &oper)
 
 void Backend::changeSign()
 {
+    ifHavePrevError();
+
     if (!str.isEmpty())
     {
         auto iter = std::find_if(str.rbegin(), str.rend(), [this](const QChar& a){ return a != DOT && isSymbol(a); });
@@ -139,6 +141,8 @@ void Backend::changeSign()
 
 void Backend::addPoint()
 {
+    ifHavePrevError();
+ 
     if (!str.isEmpty())
     {
         bool issymbol = isSymbol(str.back());
@@ -177,6 +181,8 @@ void Backend::addRoot()
 
 void Backend::addPercent()
 {
+    ifHavePrevError();
+
     if (!str.isEmpty())
     {
         bool isLastSym = isSymbol(str.back());
