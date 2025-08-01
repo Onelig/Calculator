@@ -1,4 +1,5 @@
 #pragma once
+
 #include <QString>
 #include <list>
 #include <boost/multiprecision/cpp_dec_float.hpp>

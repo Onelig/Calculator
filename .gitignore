@@ -59,6 +59,7 @@ CMakeLists.txt.user*
 *.sdf
 *.opensdf
 *.vcxproj
+*.vscode
 *vcxproj.*
 
 # MinGW generated files
