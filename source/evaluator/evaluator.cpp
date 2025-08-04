@@ -23,16 +23,27 @@ boost::multiprecision::cpp_dec_float_100 Evaluator::getResult_(std::shared_ptr<N
         return getResult_(root_->left) * getResult_(root_->right);
 
     case TOKEN_DIV:
-    {
         return getResult_(root_->left) / getResult_(root_->right);
-    }
+
+    default:
+        throw std::runtime_error("Evaluator error: Uncertain token.");
+        break;
     }
 }
-
 
 Evaluator::Evaluator(std::shared_ptr<Node> root)
     : root(std::move(root))
 { }
+
+bool Evaluator::hasError()
+{
+    return !error_message.isEmpty();
+}
+
+const QString& Evaluator::what() const
+{
+    return error_message;
+}
 
 QString Evaluator::getResult()
 {

@@ -163,7 +163,13 @@ void Backend::addPoint()
             if (!issymbol)
                 str.push_back(DOT);
         }
+        else
+        {
+            str += QString('0') + DOT;
+        }
     }
+    else
+        str += QString('0') + DOT;
 
     emit strUpdated(str);
 }
@@ -237,17 +243,23 @@ void Backend::getResult()
 
         if (!str.isEmpty())
         {
-            Lexer lexer(str);
-            Parser parser(lexer.getLexema());
-            Evaluator eval(parser.getTree());
             QString last_str = str;
-            str = eval.getResult();
-
-            if (str != last_str)
+            try
             {
-                emit histUpdated(last_str);
-                history.push_back(last_str + QChar('=') + str);
-                emit getHistoryList();
+                Lexer lexer(str);
+                Parser parser(lexer.getLexema());
+                Evaluator eval(parser.getTree());
+                str = eval.getResult();
+                if (str != last_str)
+                {
+                    emit histUpdated(last_str);
+                    history.push_back(last_str + QChar('=') + str);
+                    emit getHistoryList();
+                }
+            }
+            catch (const std::runtime_error& error)
+            {
+                str = error.what();
             }
         }
         emit strUpdated(str);

@@ -1,4 +1,6 @@
-add_library(backend backend.cpp)
+add_library( backend 
+    backend.cpp
+)
 
 target_include_directories(backend PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

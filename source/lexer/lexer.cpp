@@ -76,6 +76,11 @@ Lexer::Lexer(const QString &expr)
             tokens.push_back(Token{TOKEN_NUMBER, std::make_shared<boost::multiprecision::cpp_dec_float_100>("100")});
             ++citer;
         }
+        else
+        {
+            throw std::runtime_error("Lexer error: Unexpected character '" + QString(*citer).toStdString() + "'.");
+            break;
+        }
     }
 
     tokens.push_back(Token{TOKEN_END});

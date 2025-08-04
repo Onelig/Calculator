@@ -74,6 +74,8 @@ Parser::Parser(const std::list<Token> &lexema)
     : iter(lexema.cbegin())
 {
     root = minPriorityBOper();
+    if (peek().type != TOKEN_END)
+        throw std::runtime_error("Parser error: the sequence of characters is broken.");
 }
 
 std::shared_ptr<Node> Parser::getTree()

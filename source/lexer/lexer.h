@@ -21,7 +21,7 @@ enum TokenType
 struct Token final
 {
     const TokenType type;
-    const std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value;
+    const std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value;    
 };
 
 class Lexer final

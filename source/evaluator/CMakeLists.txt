@@ -1,4 +1,6 @@
-add_library(evaluator evaluator.cpp)
+add_library( evaluator 
+    evaluator.cpp
+)
 
 target_include_directories(evaluator PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 

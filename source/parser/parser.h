@@ -22,6 +22,7 @@ class Parser final
 {
 private: // fields
     std::shared_ptr<Node> root;
+    QString error_message;
 
 private: // useful instruments
     std::list<Token>::const_iterator iter;
