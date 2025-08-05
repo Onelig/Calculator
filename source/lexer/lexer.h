@@ -3,6 +3,7 @@
 #include <QString>
 #include <list>
 #include <boost/multiprecision/cpp_dec_float.hpp>
+#include "symbols.h"
 
 enum TokenType
 {
@@ -14,7 +15,6 @@ enum TokenType
     TOKEN_MUL,    // '*'
     TOKEN_DIV,    // '/'
     TOKEN_ROOT,   // '√'
-    TOKEN_PRECENT,// '%'
     TOKEN_END     // end of operators
 };
 
@@ -30,6 +30,8 @@ private:
     std::list<Token> tokens;
 
 public:
+    explicit Lexer() = default;
     explicit Lexer(const QString& expr);
+    void tokenize(const QString& expr);
     const std::list<Token>& getLexema();
 };

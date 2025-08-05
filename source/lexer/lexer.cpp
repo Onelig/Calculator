@@ -1,8 +1,12 @@
 #include "lexer.h"
-#include "symbols.h"
 #include <QRegularExpression>
 
 Lexer::Lexer(const QString &expr)
+{
+    tokenize(expr);
+}
+
+void Lexer::tokenize(const QString& expr)
 {
     QString::const_iterator citer = expr.cbegin();
     bool isOperMSkipped = false;

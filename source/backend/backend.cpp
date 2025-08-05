@@ -246,7 +246,8 @@ void Backend::getResult()
             QString last_str = str;
             try
             {
-                Lexer lexer(str);
+                Lexer lexer;
+                lexer.tokenize(str);
                 Parser parser(lexer.getLexema());
                 Evaluator eval(parser.getTree());
                 str = eval.getResult();
