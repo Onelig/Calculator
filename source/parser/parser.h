@@ -13,7 +13,7 @@ public:
 
     const TokenType oper;
 public:
-    Node(std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value, std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
+    Node(std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value);
     Node(TokenType oper, std::shared_ptr<Node> left = nullptr, std::shared_ptr<Node> right = nullptr);
     boost::multiprecision::cpp_dec_float_100 getValue(); // when oper == TOKEN_NUMBER
 };
@@ -22,10 +22,9 @@ class Parser final
 {
 private: // fields
     std::shared_ptr<Node> root;
-    QString error_message;
 
 private: // useful instruments
-    std::list<Token>::const_iterator iter;
+    std::list<Token>::const_iterator iter, end;
     const Token& peek();
     const Token& get();
 
@@ -36,6 +35,8 @@ private: // main methods
     std::shared_ptr<Node> minPriorityBOper(); // '+', '-'
 
 public:
+    explicit Parser() = default;
     explicit Parser(const std::list<Token>& lexema);
+    void parse(const std::list<Token> &lexema);
     std::shared_ptr<Node> getTree();
 };

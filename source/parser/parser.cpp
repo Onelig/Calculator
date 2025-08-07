@@ -1,7 +1,7 @@
 #include "parser.h"
 
-Node::Node(std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value, std::shared_ptr<Node> left, std::shared_ptr<Node> right)
-    : value(std::move(value)), oper(TOKEN_NUMBER), right(std::move(right)), left(std::move(left))
+Node::Node(std::shared_ptr<const boost::multiprecision::cpp_dec_float_100> value)
+    : value(std::move(value)), oper(TOKEN_NUMBER), right(nullptr), left(nullptr)
 { }
 
 Node::Node(TokenType oper, std::shared_ptr<Node> left, std::shared_ptr<Node> right)
@@ -10,11 +10,17 @@ Node::Node(TokenType oper, std::shared_ptr<Node> left, std::shared_ptr<Node> rig
 
 boost::multiprecision::cpp_dec_float_100 Node::getValue()
 {
-    return *value;
+    if (value != nullptr)
+        return *value;
+    else 
+        throw std::runtime_error("Invalid number");   
 }
 
 const Token& Parser::peek()
 {
+    if (iter == end)
+        throw std::runtime_error("Parser error: the sequence of characters is broken.");
+
     return *iter;
 }
 
@@ -25,7 +31,10 @@ const Token& Parser::get()
 
 std::shared_ptr<Node> Parser::getNum()
 {
-    return (peek().type == TOKEN_NUMBER ? std::make_shared<Node>(get().value) : nullptr);
+    if (peek().type != TOKEN_NUMBER)
+        throw std::runtime_error("Parser error: the sequence of characters is broken.");
+
+    return std::make_shared<Node>(get().value);
 }
 
 std::shared_ptr<Node> Parser::UOper() // '√', '(', ')', U'-'
@@ -39,7 +48,10 @@ std::shared_ptr<Node> Parser::UOper() // '√', '(', ')', U'-'
     {
         get();
         std::shared_ptr<Node> mroot = minPriorityBOper();
-        get(); // skip RPAREN
+        if (peek().type == TOKEN_RPAREN)
+            get(); // skip RPAREN
+        else 
+            throw std::runtime_error("Parser error: Right paren was skipped.");
         return mroot;
     }
 
@@ -71,11 +83,20 @@ std::shared_ptr<Node> Parser::minPriorityBOper() // '+', '-'
 }
 
 Parser::Parser(const std::list<Token> &lexema)
-    : iter(lexema.cbegin())
 {
-    root = minPriorityBOper();
-    if (peek().type != TOKEN_END)
-        throw std::runtime_error("Parser error: the sequence of characters is broken.");
+    parse(lexema);
+}
+
+void Parser::parse(const std::list<Token> &lexema)
+{
+    if (lexema.size() > 0 && lexema.begin()->type != TOKEN_END)
+    {
+        iter = lexema.begin();
+        end = lexema.end();
+        root = minPriorityBOper();
+        if (peek().type != TOKEN_END)
+            throw std::runtime_error("Parser error: the sequence of characters is broken.");
+    }
 }
 
 std::shared_ptr<Node> Parser::getTree()

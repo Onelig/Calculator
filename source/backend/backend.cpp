@@ -23,6 +23,7 @@ void Backend::remove(RemoveMode mode)
     case REMOVE_ALL:
         lr_brackets = 0;
         str.clear();
+        emit histUpdated("");
         break;
 
     case REMOVE_STR:
@@ -163,7 +164,7 @@ void Backend::addPoint()
             if (!issymbol)
                 str.push_back(DOT);
         }
-        else
+        else if (str.back() != DOT)
         {
             str += QString('0') + DOT;
         }
@@ -244,23 +245,30 @@ void Backend::getResult()
         if (!str.isEmpty())
         {
             QString last_str = str;
-            try
+            // if last_str is just a number
+            if (std::find_if(last_str.cbegin(), last_str.cend(), [](const QChar& a){ return (a != DOT && isSymbol(a)); }) != last_str.cend())
             {
-                Lexer lexer;
-                lexer.tokenize(str);
-                Parser parser(lexer.getLexema());
-                Evaluator eval(parser.getTree());
-                str = eval.getResult();
-                if (str != last_str)
+                try
                 {
-                    emit histUpdated(last_str);
-                    history.push_back(last_str + QChar('=') + str);
-                    emit getHistoryList();
+                    Lexer lexer;
+                    lexer.tokenize(str);
+                    Parser parser(lexer.getLexema());
+                    Evaluator eval(parser.getTree());
+                    str = eval.getResult();    
+
+                    if (str != last_str)
+                    {
+                        
+                        
+                        emit histUpdated(last_str);
+                        history.push_back(last_str + QChar('=') + str);
+                        emit getHistoryList();
+                    }
                 }
-            }
-            catch (const std::runtime_error& error)
-            {
-                str = error.what();
+                catch (const std::runtime_error& error)
+                {
+                    str = error.what();
+                }
             }
         }
         emit strUpdated(str);

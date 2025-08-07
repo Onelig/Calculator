@@ -35,16 +35,6 @@ Evaluator::Evaluator(std::shared_ptr<Node> root)
     : root(std::move(root))
 { }
 
-bool Evaluator::hasError()
-{
-    return !error_message.isEmpty();
-}
-
-const QString& Evaluator::what() const
-{
-    return error_message;
-}
-
 QString Evaluator::getResult()
 {
     std::string str = getResult_(root).str(5, std::ios_base::fixed);
