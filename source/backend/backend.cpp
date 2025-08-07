@@ -258,10 +258,8 @@ void Backend::getResult()
 
                     if (str != last_str)
                     {
-                        
-                        
                         emit histUpdated(last_str);
-                        history.push_back(last_str + QChar('=') + str);
+                        history.prepend(last_str + QChar('=') + str);
                         emit getHistoryList();
                     }
                 }
