@@ -7,6 +7,8 @@ protected:
     Parser parser_;
 };
 
+using boost::multiprecision::cpp_dec_float_100;
+
 void isEqualNode(const std::shared_ptr<Node> tree1, const std::shared_ptr<Node> tree2)
 {
     if (tree1 && tree2)
@@ -21,6 +23,7 @@ void isEqualNode(const std::shared_ptr<Node> tree1, const std::shared_ptr<Node> 
     else
         ASSERT_EQ(tree1, tree2); // tree1 == nullptr && tree2 == nullptr
 }
+
 
 TEST_F(ParserTest, SimpleExpression)
 {

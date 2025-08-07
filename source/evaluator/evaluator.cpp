@@ -2,32 +2,39 @@
 
 boost::multiprecision::cpp_dec_float_100 Evaluator::getResult_(std::shared_ptr<Node> root_)
 {
-    switch (root_->oper)
+    if (root_)
     {
-    case TOKEN_NUMBER:
-        return root_->getValue();
+        switch (root_->oper)
+        {
+        case TOKEN_NUMBER:
+            return root_->getValue();
 
-    case TOKEN_ROOT:
-        return sqrt(getResult_(root_->left));
+        case TOKEN_ROOT:
+            return sqrt(getResult_(root_->left));
 
-    case TOKEN_MINUS:
-        if (root_->right)
-            return getResult_(root_->left) - getResult_(root_->right);
-        else
-            return -getResult_(root_->left);
+        case TOKEN_MINUS:
+            if (root_->right)
+                return getResult_(root_->left) - getResult_(root_->right);
+            else
+                return -getResult_(root_->left);
 
-    case TOKEN_PLUS:
-        return getResult_(root_->left) + getResult_(root_->right);
+        case TOKEN_PLUS:
+            return getResult_(root_->left) + getResult_(root_->right);
 
-    case TOKEN_MUL:
-        return getResult_(root_->left) * getResult_(root_->right);
+        case TOKEN_MUL:
+            return getResult_(root_->left) * getResult_(root_->right);
 
-    case TOKEN_DIV:
-        return getResult_(root_->left) / getResult_(root_->right);
+        case TOKEN_DIV:
+            return getResult_(root_->left) / getResult_(root_->right);
 
-    default:
-        throw std::runtime_error("Evaluator error: Uncertain token.");
-        break;
+        default:
+            throw std::runtime_error("Evaluator error: Uncertain token.");
+            break;
+        }
+    }   
+    else 
+    {
+        throw std::runtime_error("Evaluator error: Token was skipped.");
     }
 }
 
@@ -35,15 +42,25 @@ Evaluator::Evaluator(std::shared_ptr<Node> root)
     : root(std::move(root))
 { }
 
+void Evaluator::setRoot(std::shared_ptr<Node> root)
+{
+    this->root = root; 
+}
+
 QString Evaluator::getResult()
 {
-    std::string str = getResult_(root).str(5, std::ios_base::fixed);
+    std::string str = "";
+    
+    if (root)
+    {
+        str = getResult_(root).str(5, std::ios_base::fixed);
 
-    while (!str.empty() && str.back() == '0')
-        str.pop_back();
+        while (!str.empty() && str.back() == '0')
+            str.pop_back();
 
-    if (!str.empty() && str.back() == '.')
-        str.pop_back();
+        if (!str.empty() && str.back() == '.')
+            str.pop_back();
+    }
 
     return QString::fromStdString(str);
 }

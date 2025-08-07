@@ -7,15 +7,16 @@ protected:
     Lexer lexer_;
 };
 
+using boost::multiprecision::cpp_dec_float_100;
 
 TEST_F(LexerTest, TokenizeSimpleInput) 
 {
     std::list<Token> expected_tokens
     {
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("9381")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("9381")},
         Token{TOKEN_MUL},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("351.215")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("351.215")},
         Token{TOKEN_END}
     };
 
@@ -46,15 +47,15 @@ TEST_F(LexerTest, TokenizeBasicExpression)
         Token{TOKEN_ROOT},
         Token{TOKEN_ROOT},
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("999")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("999")},
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("52")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("52")},
         Token{TOKEN_MUL},
         Token{TOKEN_LPAREN},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("84")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("84")},
         Token{TOKEN_RPAREN},
         Token{TOKEN_MUL},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("71")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("71")},
         Token{TOKEN_END}
     };
 
@@ -83,16 +84,16 @@ TEST_F(LexerTest, TokenizeIntermediateExpression)
     std::list<Token> expected_tokens
     {
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("81")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("81")},
         Token{TOKEN_PLUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("91")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("91")},
         Token{TOKEN_MUL},
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("1")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("1")},
         Token{TOKEN_DIV},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("100")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("100")},
         Token{TOKEN_DIV},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("10")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("10")},
         Token{TOKEN_END}
     };
 
@@ -148,7 +149,7 @@ TEST_F(LexerTest, TokenizeOneNumExpression)
     std::list<Token> expected_tokens
     {
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("31")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("31")},
         Token{TOKEN_END}
     };
 
