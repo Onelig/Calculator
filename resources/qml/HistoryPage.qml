@@ -22,7 +22,7 @@ Item {
         verticalLayoutDirection: ListView.BottomToTop
 
         delegate: Column {
-            width: parent.width
+            width: historyListView.width
 
             Rectangle {
                 width: parent.width
