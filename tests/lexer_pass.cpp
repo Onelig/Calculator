@@ -34,7 +34,7 @@ TEST_F(LexerTest, TokenizeSimpleInput)
         if (tokentype == TOKEN_NUMBER)
             ASSERT_EQ(*value, *expected_value);
         else 
-            ASSERT_EQ(value, expected_value);
+            ASSERT_EQ(value, expected_value); // value == nullptr && expected_value == nullptr
     }    
 }
  
@@ -70,10 +70,10 @@ TEST_F(LexerTest, TokenizeBasicExpression)
 
         ASSERT_EQ(tokentype, expected_tokentype);
 
-        if (tokentype == TOKEN_NUMBER)
+        if (tokentype == TOKEN_NUMBER && expected_tokentype == TOKEN_NUMBER)
             ASSERT_EQ(*value, *expected_value);
         else 
-            ASSERT_EQ(value, expected_value);
+            ASSERT_EQ(value, expected_value); // value == nullptr && expected_value == nullptr
     }    
 }
 
@@ -111,7 +111,7 @@ TEST_F(LexerTest, TokenizeIntermediateExpression)
         if (tokentype == TOKEN_NUMBER)
             ASSERT_EQ(*value, *expected_value);
         else 
-            ASSERT_EQ(value, expected_value);
+            ASSERT_EQ(value, expected_value); // value == nullptr && expected_value == nullptr
     }    
 }
 
@@ -138,7 +138,7 @@ TEST_F(LexerTest, TokenizeEmptyExpression)
         if (tokentype == TOKEN_NUMBER)
             ASSERT_EQ(*value, *expected_value);
         else 
-            ASSERT_EQ(value, expected_value);
+            ASSERT_EQ(value, expected_value); // value == nullptr && expected_value == nullptr
     }    
 }
 
@@ -167,7 +167,7 @@ TEST_F(LexerTest, TokenizeOneNumExpression)
         if (tokentype == TOKEN_NUMBER)
             ASSERT_EQ(*value, *expected_value);
         else 
-            ASSERT_EQ(value, expected_value);
+            ASSERT_EQ(value, expected_value); // value == nullptr && expected_value == nullptr
     }    
 }
 
