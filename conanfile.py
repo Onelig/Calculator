@@ -9,8 +9,8 @@ class ExampleRecipe(ConanFile):
     version = "0.1.0"
 
     settings = "os", "compiler", "build_type", "arch"
-    generators = "CMakeDeps", "CMakeToolchain"
-
+    generators = "CMakeDeps", "CMakeToolchain"  
+    
     def requirements(self):
         self.requires("boost/1.88.0")
         self.requires("gtest/1.16.0")
