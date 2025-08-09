@@ -2,7 +2,7 @@
 #define BACKEND_H
 
 #include <QObject>
-#include <qqml.h>
+#include <QtQml/qqml.h>
 #include <QGuiApplication>
 
 class Backend : public QObject

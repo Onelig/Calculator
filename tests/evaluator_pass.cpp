@@ -15,13 +15,13 @@ TEST_F(EvaluatorTest, EvalSimpleExpression)
 
     std::shared_ptr<Node> tree = std::make_shared<Node>(
         TOKEN_PLUS, 
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120")),
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("120")),
         std::make_shared<Node>(
             TOKEN_MUL,
-            std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("123")),
+            std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("123")),
             std::make_shared<Node>(
                 TOKEN_ROOT,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("9"))
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("9"))
             )    
         )
     );
@@ -47,21 +47,21 @@ TEST_F(EvaluatorTest, EvalBasicExpression)
                 TOKEN_MINUS,
                 std::make_shared<Node>(
                     TOKEN_ROOT,
-                    std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("81"))
+                    std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("81"))
                 )
             ),
-            std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("613"))
+            std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("613"))
         ),
         std::make_shared<Node>(
             TOKEN_MUL,
             std::make_shared<Node>(
                 TOKEN_DIV,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("51")),
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("32.001"))
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("51")),
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("32.001"))
             ),
             std::make_shared<Node>(
                 TOKEN_ROOT,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("4096"))
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("4096"))
             )      
         )
     );
@@ -86,10 +86,10 @@ TEST_F(EvaluatorTest, EvalThrowErrorValSkippedExpression)
 {
     std::shared_ptr<Node> tree = std::make_shared<Node>(
         TOKEN_PLUS, 
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120")),
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("120")),
         std::make_shared<Node>(
             TOKEN_MUL,
-            std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("123"))
+            std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("123"))
         )
     );
 
@@ -102,7 +102,7 @@ TEST_F(EvaluatorTest, EvalThrowErrorUndValueExpression)
 {
     std::shared_ptr<Node> tree = std::make_shared<Node>(
         TOKEN_LPAREN,
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120"))
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("120"))
     );
 
     evaluator_.setRoot(tree);
@@ -115,7 +115,7 @@ TEST_F(EvaluatorTest, EvalOneArgExpression)
     QString expected_result("123.312");
 
     std::shared_ptr<Node> tree = std::make_shared<Node>(
-        std::make_shared<const boost::multiprecision::cpp_dec_float_100>("123.3120")
+        std::make_shared<const cpp_dec_float_100>("123.3120")
     );
 
     evaluator_.setRoot(tree);
@@ -133,8 +133,8 @@ TEST_F(EvaluatorTest, EvalDivisionByZero)
 
     std::shared_ptr<Node> tree = std::make_shared<Node>(
         TOKEN_DIV,
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("42")),
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("0"))
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("42")),
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("0"))
     );
 
     evaluator_.setRoot(tree);
@@ -152,7 +152,7 @@ TEST_F(EvaluatorTest, EvalNegativeRoot)
 
     std::shared_ptr<Node> tree = std::make_shared<Node>(
         TOKEN_ROOT,
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("-9"))
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("-9"))
     );
 
     evaluator_.setRoot(tree);
@@ -166,7 +166,6 @@ TEST_F(EvaluatorTest, EvalNegativeRoot)
 TEST_F(EvaluatorTest, EvalComplexExpression)
 {
     QString expected_result("5058.56789");
-
 
     std::shared_ptr<Node> tree = std::make_shared<Node>(
         TOKEN_PLUS,

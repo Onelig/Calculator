@@ -29,25 +29,25 @@ TEST_F(ParserTest, SimpleExpression)
 {
     std::shared_ptr<Node> expected_tree = std::make_shared<Node>(
         TOKEN_PLUS, 
-        std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120")),
+        std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("120")),
         std::make_shared<Node>(
             TOKEN_MUL,
-            std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("123")),
+            std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("123")),
             std::make_shared<Node>(
                 TOKEN_ROOT,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("9"))
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("9"))
             )    
         )
     );
 
     std::list<Token> tokens
     {
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("120")},
         Token{TOKEN_PLUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("123")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("123")},
         Token{TOKEN_MUL},
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("9")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("9")},
         Token{TOKEN_END}
     };
 
@@ -65,17 +65,17 @@ TEST_F(ParserTest, BasicExpression)
         TOKEN_DIV, 
         std::make_shared<Node>(
             TOKEN_ROOT,
-            std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("99981.1"))
+            std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("99981.1"))
             ),
         std::make_shared<Node>(
             TOKEN_ROOT,
             std::make_shared<Node>(
                 TOKEN_MINUS,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("891")),
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("891")),
                 std::make_shared<Node>(
                     TOKEN_MUL,
-                    std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("914")),
-                    std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("0"))
+                    std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("914")),
+                    std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("0"))
                 )
             )
         )
@@ -84,15 +84,15 @@ TEST_F(ParserTest, BasicExpression)
     std::list<Token> tokens
     {
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("99981.1")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("99981.1")},
         Token{TOKEN_DIV},
         Token{TOKEN_ROOT},
         Token{TOKEN_LPAREN},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("891")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("891")},
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("914")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("914")},
         Token{TOKEN_MUL},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("0")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("0")},
         Token{TOKEN_RPAREN},
         Token{TOKEN_END}
     };
@@ -115,21 +115,21 @@ TEST_F(ParserTest, IntermediateExpression)
                 TOKEN_MINUS,
                 std::make_shared<Node>(
                     TOKEN_ROOT,
-                    std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("81.31"))
+                    std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("81.31"))
                 )
             ),
-            std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("613"))
+            std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("613"))
         ),
         std::make_shared<Node>(
             TOKEN_MUL,
             std::make_shared<Node>(
                 TOKEN_DIV,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("51")),
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("32.001"))
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("51")),
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("32.001"))
             ),
             std::make_shared<Node>(
                 TOKEN_ROOT,
-                std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("4161"))
+                std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("4161"))
             )      
         )
     );
@@ -138,17 +138,17 @@ TEST_F(ParserTest, IntermediateExpression)
     {
         Token{TOKEN_MINUS},
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("81.31")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("81.31")},
         Token{TOKEN_PLUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("613")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("613")},
         Token{TOKEN_MINUS},
         Token{TOKEN_LPAREN},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("51")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("51")},
         Token{TOKEN_DIV},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("32.001")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("32.001")},
         Token{TOKEN_MUL},
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("4161")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("4161")},
         Token{TOKEN_RPAREN},
         Token{TOKEN_END}
     };
@@ -163,11 +163,11 @@ TEST_F(ParserTest, IntermediateExpression)
 
 TEST_F(ParserTest, EmptyExpression)
 {
-    std::shared_ptr<Node> expected_tree = std::make_shared<Node>(std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120"));
+    std::shared_ptr<Node> expected_tree = std::make_shared<Node>(std::make_shared<const cpp_dec_float_100>("120"));
 
     std::list<Token> tokens
     {
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("120")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("120")},
         Token{TOKEN_END}
     };
 
@@ -202,16 +202,16 @@ TEST_F(ParserTest, ThrowErrorExpressionDoubleOper)
     std::list<Token> tokens
     {
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("99981.1")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("99981.1")},
         Token{TOKEN_DIV},
         Token{TOKEN_ROOT},
         Token{TOKEN_LPAREN},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("891")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("891")},
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("914")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("914")},
         Token{TOKEN_MUL},
         Token{TOKEN_MUL}, // ! 
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("0")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("0")},
         Token{TOKEN_RPAREN},
         Token{TOKEN_END}
     };
@@ -225,15 +225,15 @@ TEST_F(ParserTest, ThrowErrorExpressionNoEnd)
     std::list<Token> tokens
     {
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("99981.1")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("99981.1")},
         Token{TOKEN_DIV},
         Token{TOKEN_ROOT},
         Token{TOKEN_LPAREN},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("891")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("891")},
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("914")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("914")},
         Token{TOKEN_MUL},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("0")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("0")},
         Token{TOKEN_RPAREN}
         // Token{TOKEN_END}
     };
@@ -247,15 +247,15 @@ TEST_F(ParserTest, ThrowErrorExpressionSkipParen)
     std::list<Token> tokens
     {
         Token{TOKEN_ROOT},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("99981.1")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("99981.1")},
         Token{TOKEN_DIV},
         Token{TOKEN_ROOT},
         Token{TOKEN_LPAREN},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("891")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("891")},
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("914")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("914")},
         Token{TOKEN_MINUS},
-        Token{TOKEN_NUMBER, std::make_shared<const boost::multiprecision::cpp_dec_float_100>("0")},
+        Token{TOKEN_NUMBER, std::make_shared<const cpp_dec_float_100>("0")},
         // Token{TOKEN_RPAREN}
         Token{TOKEN_END}
     };
