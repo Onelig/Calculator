@@ -36,7 +36,7 @@ Button {
 
     Timer {
         id: releaseTimer
-        interval: 150
+        interval: 100
         running: false
         repeat: false
         onTriggered: {
@@ -47,6 +47,7 @@ Button {
 
     function simulateClick() {
         if (releaseTimer.running) {
+            root.clicked()
             releaseTimer.stop()
         }
         root.fakePressed = true

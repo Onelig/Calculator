@@ -123,6 +123,7 @@ void Backend::addOper(const QChar &oper)
     emit strUpdated(str);
 }
 
+
 void Backend::changeSign()
 {
     ifHavePrevError();
@@ -269,13 +270,14 @@ void Backend::getResult()
                 }
             }
         }
-        emit strUpdated(str);
     }
     else
     {
         remove(REMOVE_ALL);
         str = "the bracket is not closed";
     }
+    
+    emit strUpdated(str);
 }
 
 QStringList Backend::getHistoryList()
@@ -288,6 +290,7 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
     if (event->type() == QEvent::KeyPress)
     {
         QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+        
         const int key = keyEvent->key();
         const QString textStr = keyEvent->text();
 
@@ -299,7 +302,7 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
         {
             switch (key)
             {
-            case Qt::Key_Minus:      emit targetButton("\u2212");      break;
+            case Qt::Key_Minus:      emit targetButton("\u2212");   break;
             case Qt::Key_Asterisk:   emit targetButton(MULTIPLY);   break;
             case Qt::Key_Slash:      emit targetButton(DIVIDE);     break;
             case Qt::Key_Plus:       emit targetButton(PLUS);       break;
@@ -314,16 +317,16 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
                     emit targetButton(QString("CE"));
                 else
                     emit targetButton("\u232B");
-
                 break;
+            default:
+                return false;
             }
         }
-
         return true;
     }
-
     return false;
 }
+
 
 void Backend::ChangeSignASign(int index)
 {
