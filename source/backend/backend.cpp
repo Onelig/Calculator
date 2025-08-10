@@ -299,7 +299,7 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
         {
             switch (key)
             {
-            case Qt::Key_Minus:      emit targetButton(MINUS);      break;
+            case Qt::Key_Minus:      emit targetButton("\u2212");      break;
             case Qt::Key_Asterisk:   emit targetButton(MULTIPLY);   break;
             case Qt::Key_Slash:      emit targetButton(DIVIDE);     break;
             case Qt::Key_Plus:       emit targetButton(PLUS);       break;
