@@ -4,7 +4,7 @@ import QtQuick.Layouts 2.15
 
 Item {
     id: histPage
-    signal buttonClicked()
+    signal buttonClicked()    
 
     ListView {
         id: historyListView
@@ -16,7 +16,7 @@ Item {
         anchors.bottomMargin: 0
         clip: true
         interactive: true
-
+        
         model: backend ? backend.historyList : []
 
         verticalLayoutDirection: ListView.BottomToTop
@@ -34,7 +34,7 @@ Item {
                 text: modelData
                 anchors.right: parent.right
                 horizontalAlignment: Text.AlignRight
-                font.pixelSize: histPage.height / 11
+                font.pixelSize: Math.min(histPage.width, histPage.height) / 11
             }
         }
     }

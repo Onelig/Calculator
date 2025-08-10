@@ -319,6 +319,6 @@ Item {
             verticalAlignment: Text.AlignVCenter
         }
 
-        onClicked: сaclPage.buttonClicked()
+        onClicked: calcPage.buttonClicked()
     }
 }
