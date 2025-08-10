@@ -42,6 +42,7 @@ signals:
     void histUpdated(const QString& newHist);
 
     void historyListChanged();
+    void targetButton(const QString& buttonName);
 protected:
     bool eventFilter(QObject *object, QEvent *event);
 

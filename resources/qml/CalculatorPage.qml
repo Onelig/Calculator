@@ -3,13 +3,14 @@ import QtQuick.Controls 6.2
 import QtQuick.Layouts 2.15
 import MyBackend 1.0
 
-
 Item {
-    id: сaclPage
+    id: calcPage
     property string str: ""
     property string hist: ""
-    signal buttonClicked()
+    property var buttonMap: ({})
 
+    signal buttonClicked()
+    
     Connections {
         target: backend
 
@@ -19,6 +20,10 @@ Item {
 
         function onHistUpdated(newHist) {
             hist = newHist
+        }
+
+        function onTargetButton(buttonName) {
+            buttonMap[buttonName].simulateClick()
         }
     }
 
@@ -40,145 +45,192 @@ Item {
             id: button_percent
             text: "%"
             onClicked: backend.addPercent()
+            
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_Clear_Entry
             text: "CE"
             onClicked: backend.remove(Backend.REMOVE_STR)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_Clear
             text: "С"
             onClicked: backend.remove(Backend.REMOVE_ALL)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_remove_elem
             text: "\u232B"
             onClicked: backend.remove(Backend.REMOVE_ELEM)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_root
             text: "\u221Ax"
             onClicked: backend.addRoot()
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_lbr
             text: "("
             onClicked: backend.addBracket(true)
+
+            Component.onCompleted: buttonMap['('] = this
         }
 
         MyGridButton {
             id: button_rbr
             text: ")"
             onClicked: backend.addBracket(false)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_division
             text: "\u00F7"
             onClicked: backend.addOper(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num7
             text: "7"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num8
             text: "8"
-            onClicked: {backend.addDigit(text)
-            }
+            onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num9
             text: "9"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_mult
             text: "\u00D7"
             onClicked: backend.addOper(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num4
             text: "4"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num5
             text: "5"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num6
             text: "6"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_minus
             text: "\u2212"
             onClicked: backend.addOper('-')
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num1
             text: "1"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num2
             text: "2"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num3
             text: "3"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_plus
             text: "+"
             onClicked: backend.addOper(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_change_sign
             text: "\u00B1"
             onClicked: backend.changeSign()
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_num0
             text: "0"
             onClicked: backend.addDigit(text)
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_point
             text: "."
             onClicked: backend.addPoint()
+
+            Component.onCompleted: buttonMap[text] = this
         }
 
         MyGridButton {
             id: button_equal
             text: "="
             onClicked: backend.getResult()
+
+            Component.onCompleted: buttonMap[text] = this
         }
     }
 

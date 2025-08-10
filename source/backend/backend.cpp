@@ -292,28 +292,28 @@ bool Backend::eventFilter(QObject *object, QEvent *event)
         const QString textStr = keyEvent->text();
 
         if (!textStr.isEmpty() && QRegularExpression("[0-9]").match(textStr.back()).hasMatch())
-            addDigit(textStr.back());
+            emit targetButton(textStr.back());
         else if (!textStr.isEmpty() && textStr.back() == QChar('='))
-            getResult();
+            emit targetButton(QChar('='));
         else
         {
             switch (key)
             {
-            case Qt::Key_Minus:      addOper(MINUS);      break;
-            case Qt::Key_Asterisk:   addOper(MULTIPLY);   break;
-            case Qt::Key_Slash:      addOper(DIVIDE);     break;
-            case Qt::Key_Plus:       addOper(PLUS);       break;
-            case Qt::Key_Period:     addPoint();          break;
-            case Qt::Key_Percent:    addPercent();        break;
-            case Qt::Key_ParenLeft:  addBracket(true);    break;
-            case Qt::Key_ParenRight: addBracket(false);   break;
+            case Qt::Key_Minus:      emit targetButton(MINUS);      break;
+            case Qt::Key_Asterisk:   emit targetButton(MULTIPLY);   break;
+            case Qt::Key_Slash:      emit targetButton(DIVIDE);     break;
+            case Qt::Key_Plus:       emit targetButton(PLUS);       break;
+            case Qt::Key_Period:     emit targetButton(DOT);        break;
+            case Qt::Key_Percent:    emit targetButton(QChar('%')); break;
+            case Qt::Key_ParenLeft:  emit targetButton(LPAREN);     break;
+            case Qt::Key_ParenRight: emit targetButton(RPAREN);     break;
             case Qt::Key_Enter:
-            case Qt::Key_Return:     getResult();         break;
+            case Qt::Key_Return:     emit targetButton(QChar('=')); break;
             case Qt::Key_Backspace:
                 if (keyEvent->modifiers() & Qt::ControlModifier)
-                    remove(REMOVE_STR);
+                    emit targetButton(QString("CE"));
                 else
-                    remove(REMOVE_ELEM);
+                    emit targetButton("\u232B");
 
                 break;
             }
